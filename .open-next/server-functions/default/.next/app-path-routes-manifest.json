@@ -1,0 +1,20 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/page": "/admin",
+  "/api/card/[id]/route": "/api/card/[id]",
+  "/api/import/jd/route": "/api/import/jd",
+  "/api/report/[id]/evidence/route": "/api/report/[id]/evidence",
+  "/api/report/[id]/route": "/api/report/[id]",
+  "/api/report/route": "/api/report",
+  "/api/trace/[id]/route": "/api/trace/[id]",
+  "/api/tts/route": "/api/tts",
+  "/card/[id]/page": "/card/[id]",
+  "/enterprise/page": "/enterprise",
+  "/icon.svg/route": "/icon.svg",
+  "/page": "/",
+  "/passport/page": "/passport",
+  "/result/[id]/page": "/result/[id]",
+  "/school/page": "/school",
+  "/trace/[id]/page": "/trace/[id]"
+}

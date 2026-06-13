@@ -1,6 +1,4 @@
 node_modules/
-.next/
-.open-next/
 .wrangler/
 .data/
 .hunter/
@@ -11,8 +9,8 @@ pitch/
 docs/
 scripts/
 
-*.tsbuildinfo
-worker-configuration.d.ts
+.next/cache/
+.next/dev/cache/
 stack.lock.json
 
 .env

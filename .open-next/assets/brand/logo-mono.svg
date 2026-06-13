@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-label="咔哒 Clack 单色标志">
+  <rect x="10" y="10" width="76" height="76" rx="14" fill="none" stroke="#18223a" stroke-width="5"/>
+  <path d="M26 29h28M26 43h36M26 57h24" stroke="#18223a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M64 56l7 7 14-18" fill="none" stroke="#18223a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 18h15M18 18v15M78 18H63M78 18v15M18 78V63M18 78h15M78 78H63M78 78V63" stroke="#18223a" stroke-width="4" stroke-linecap="round"/>
+  <text x="108" y="50" font-family="PingFang SC, Microsoft YaHei, Noto Sans SC, sans-serif" font-size="34" font-weight="900" fill="#18223a">咔哒</text>
+  <text x="190" y="50" font-family="Outfit, Arial, sans-serif" font-size="28" font-weight="800" fill="#18223a">Clack</text>
+  <text x="110" y="76" font-family="PingFang SC, Microsoft YaHei, Noto Sans SC, sans-serif" font-size="14" font-weight="700" fill="#536176">先补 1 条证据再投</text>
+</svg>

@@ -1,0 +1,20 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/card/[id]/route": "app/api/card/[id]/route.js",
+  "/api/import/jd/route": "app/api/import/jd/route.js",
+  "/api/report/[id]/evidence/route": "app/api/report/[id]/evidence/route.js",
+  "/api/report/[id]/route": "app/api/report/[id]/route.js",
+  "/api/report/route": "app/api/report/route.js",
+  "/api/trace/[id]/route": "app/api/trace/[id]/route.js",
+  "/api/tts/route": "app/api/tts/route.js",
+  "/card/[id]/page": "app/card/[id]/page.js",
+  "/enterprise/page": "app/enterprise/page.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
+  "/page": "app/page.js",
+  "/passport/page": "app/passport/page.js",
+  "/result/[id]/page": "app/result/[id]/page.js",
+  "/school/page": "app/school/page.js",
+  "/trace/[id]/page": "app/trace/[id]/page.js"
+}
