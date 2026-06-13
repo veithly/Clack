@@ -10,7 +10,8 @@ playwright-report/
 outputs/
 artifacts/
 pitch/
-docs/
+docs/screenshots/
+docs/ui-mockups/
 scripts/
 
 *.tsbuildinfo
