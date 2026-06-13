@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "touqian-tijian",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-08",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "touqian-tijian"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "touqian-tijian-db",
+      "database_id": "dd149401-01ae-41c3-b7b2-818bf64a468c"
+    }
+  ],
+  "vars": {
+    "OPENAI_BASE_URL": "https://api.stepfun.com/step_plan/v1",
+    "OPENAI_DEFAULT_MODEL": "step-3.7-flash",
+    "MIMO_BASE_URL": "https://api.xiaomimimo.com/v1",
+    "MIMO_TTS_MODEL": "mimo-v2.5-tts",
+    "MIMO_TTS_VOICE": "Chloe",
+    "MIMO_TTS_FORMAT": "mp3",
+    "NEXT_PUBLIC_APP_NAME": "咔哒 / Clack"
+  }
+}
