@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("公开岗位链接可以拉取成 JD 文本", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/candidate");
   const reportUrl = new URL("/api/report", page.url()).toString();
   await page.getByTestId("jd-url-input").fill(reportUrl);
   await page.getByTestId("import-jd-url-button").click();
@@ -11,7 +11,7 @@ test("公开岗位链接可以拉取成 JD 文本", async ({ page }) => {
 });
 
 test("TXT 简历上传会填入简历输入框", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/candidate");
   await expect(page.getByTestId("upload-resume-button")).toBeVisible();
   await page.getByTestId("resume-file-input").setInputFiles({
     name: "resume.txt",
@@ -35,7 +35,7 @@ test("PDF 简历上传会解析文字并填入简历输入框", async ({ page, b
   const pdf = await pdfPage.pdf({ format: "A4" });
   await pdfPage.close();
 
-  await page.goto("/");
+  await page.goto("/candidate");
   await page.getByTestId("resume-file-input").setInputFiles({
     name: "resume.pdf",
     mimeType: "application/pdf",
