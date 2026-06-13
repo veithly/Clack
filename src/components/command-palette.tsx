@@ -30,7 +30,8 @@ export function CommandPalette() {
   const actions = useMemo<Action[]>(() => {
     const currentId = path.match(/\/(?:result|card|trace)\/([^/]+)/)?.[1];
     return [
-      { label: "回到体检台", detail: "重新粘贴岗位和简历", run: () => (window.location.href = "/") },
+      { label: "回到着陆页", detail: "查看四角色总览和一键演示", run: () => (window.location.href = "/") },
+      { label: "回到候选人台", detail: "重新粘贴岗位和简历", run: () => (window.location.href = "/candidate") },
       { label: "打开证据护照", detail: "查看材料库、声明和证据引用关系", run: () => (window.location.href = "/passport") },
       { label: "打开企业复核示例", detail: "查看人工复核前的证据工作台", run: () => (window.location.href = "/enterprise") },
       { label: "打开高校看板示例", detail: "查看就业证据缺口和训练包", run: () => (window.location.href = "/school") },

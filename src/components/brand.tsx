@@ -8,7 +8,7 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function BrandLockup({ title = "咔哒", subtitle = "Clack：贴岗位，贴简历，30 秒看能不能投" }: { title?: string; subtitle?: string }) {
+export function BrandLockup({ title = "咔哒", subtitle = "投之前，咔哒一下" }: { title?: string; subtitle?: string }) {
   return (
     <div className="brand-lockup">
       <BrandMark />

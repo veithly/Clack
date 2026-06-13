@@ -8,10 +8,10 @@ export function SurfaceSidebar() {
         <ChevronLeft size={16} />
       </button>
       <nav>
-        <Link href="/"><Home size={16} />体检台</Link>
-        <Link href="/"><ClipboardCheck size={16} />岗位输入</Link>
-        <Link href="/"><FileText size={16} />简历输入</Link>
-        <Link href="/"><History size={16} />最近报告</Link>
+        <Link href="/"><Home size={16} />着陆页</Link>
+        <Link href="/candidate"><ClipboardCheck size={16} />候选人台</Link>
+        <Link href="/candidate"><FileText size={16} />简历输入</Link>
+        <Link href="/candidate"><History size={16} />最近报告</Link>
       </nav>
     </aside>
   );
