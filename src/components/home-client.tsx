@@ -1,17 +1,15 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle,
-  ArrowRight,
   BriefcaseBusiness,
-  Building2,
   CheckCircle2,
   ClipboardCheck,
+  Cpu,
   FileText,
-  GraduationCap,
   Link2,
   Loader2,
   LockKeyhole,
@@ -23,15 +21,56 @@ import {
   Upload
 } from "lucide-react";
 import { BrandLockup } from "@/components/brand";
-import { RolePermissionStrip } from "@/components/demo-user-switcher";
-import { evidenceArtifacts, recentJobs } from "@/lib/demo-data";
-import type { CheckReport } from "@/lib/types";
+import { evidenceArtifacts } from "@/lib/demo-data";
+import { AGENT_SHORT_LABELS, PIPELINE_AGENTS, displayEngine } from "@/lib/pipeline-meta";
+import type { AgentTrace } from "@/lib/types";
 
 type SampleInput = {
   jdText: string;
   resumeText: string;
   evidenceText: string;
 };
+
+type AgentUi = {
+  key: string;
+  label: string;
+  displayName: string;
+  status: "idle" | "running" | "done";
+  agentStatus?: AgentTrace["status"];
+  confidence?: number;
+  output?: string;
+  role?: string;
+  engine?: string;
+  durationMs?: number;
+};
+
+type StreamEvent =
+  | { type: "agent_start"; index: number; total: number; agent: { key: string; displayName: string; role: string } }
+  | { type: "agent_done"; index: number; total: number; trace: AgentTrace }
+  | { type: "done"; reportId: string; score: number; trafficLight: string; trafficLightLabel: string; confidence?: number; pipelineDepth?: string }
+  | { type: "error"; message: string };
+
+type RunPayload = {
+  jdText: string;
+  resumeText: string;
+  evidenceText: string;
+  inputSource: string;
+  useSample: boolean;
+  /** true 时强制规则路径 + 固定分数，断网也能演示；默认 false 走真实模型。 */
+  offline?: boolean;
+  jdSourceUrl?: string;
+  resumeFileName?: string;
+  proofFileName?: string;
+};
+
+function idleAgents(): AgentUi[] {
+  return PIPELINE_AGENTS.map((agent) => ({
+    key: agent.key,
+    label: AGENT_SHORT_LABELS[agent.key] ?? agent.displayName,
+    displayName: agent.displayName,
+    status: "idle"
+  }));
+}
 
 export function HomeClient() {
   const router = useRouter();
@@ -48,12 +87,14 @@ export function HomeClient() {
   const [isReadingProof, setIsReadingProof] = useState(false);
   const [isSampleLoaded, setIsSampleLoaded] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
+  const [agents, setAgents] = useState<AgentUi[]>(idleAgents);
+  const [pipelineDepth, setPipelineDepth] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const proofInputRef = useRef<HTMLInputElement | null>(null);
   const canStart = jdText.trim().length > 40 && resumeText.trim().length > 30;
   const sourceCount = Number(Boolean(jdText.trim())) + Number(Boolean(resumeText.trim())) + Number(Boolean(proofFileName || proofText.trim()));
 
-  async function loadSample() {
+  async function loadSample(): Promise<SampleInput> {
     const res = await fetch("/api/report");
     const data = (await res.json()) as SampleInput;
     setJdText(data.jdText);
@@ -65,6 +106,7 @@ export function HomeClient() {
     setProofText(data.evidenceText);
     setImportError("");
     setIsSampleLoaded(true);
+    return data;
   }
 
   async function importJdFromUrl() {
@@ -142,45 +184,133 @@ export function HomeClient() {
     }
   }
 
-  async function startCheck() {
-    if (!canStart || isScanning) return;
+  async function runCheck(payload: RunPayload) {
+    if (isScanning) return;
     setIsScanning(true);
-    const inputSource = isSampleLoaded ? "sample" : jdSourceUrl && resumeFileName ? "mixed" : jdSourceUrl ? "jd-url" : resumeFileName ? "resume-file" : "paste";
+    setImportError("");
+    setPipelineDepth("");
+    setAgents(idleAgents());
     try {
-      const res = await fetch("/api/report", {
+      const res = await fetch("/api/report/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jdText, resumeText, jdSourceUrl, resumeFileName, proofFileName, evidenceText: proofText, inputSource, useSample: isSampleLoaded })
+        body: JSON.stringify(payload)
       });
-      const report = (await res.json()) as CheckReport;
-      router.push(`/result/${report.id}`);
-    } finally {
+      if (!res.body) {
+        setImportError("浏览器不支持流式分析，请刷新重试。");
+        setIsScanning(false);
+        return;
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let reportId = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          let event: StreamEvent;
+          try {
+            event = JSON.parse(line) as StreamEvent;
+          } catch {
+            continue;
+          }
+          if (event.type === "agent_start") {
+            setAgents((prev) => prev.map((item, index) => (index === event.index ? { ...item, status: "running", role: event.agent.role } : item)));
+          } else if (event.type === "agent_done") {
+            setAgents((prev) =>
+              prev.map((item, index) =>
+                index === event.index
+                  ? {
+                      ...item,
+                      status: "done",
+                      agentStatus: event.trace.status,
+                      confidence: event.trace.confidence,
+                      output: event.trace.outputSummary,
+                      engine: event.trace.engine,
+                      durationMs: event.trace.durationMs
+                    }
+                  : item
+              )
+            );
+          } else if (event.type === "done") {
+            reportId = event.reportId;
+            setPipelineDepth(event.pipelineDepth ?? "");
+          } else if (event.type === "error") {
+            setImportError(event.message);
+          }
+        }
+      }
+      if (reportId) {
+        await new Promise((resolve) => setTimeout(resolve, 480));
+        router.push(`/result/${reportId}`);
+      } else {
+        setImportError((current) => current || "分析没有返回报告，请重试。");
+        setIsScanning(false);
+      }
+    } catch {
+      setImportError("分析流水线连接中断，请重试。");
       setIsScanning(false);
     }
   }
 
+  function startCheck() {
+    if (!canStart || isScanning) return;
+    const inputSource = isSampleLoaded ? "sample" : jdSourceUrl && resumeFileName ? "mixed" : jdSourceUrl ? "jd-url" : resumeFileName ? "resume-file" : "paste";
+    void runCheck({ jdText, resumeText, evidenceText: proofText, inputSource, useSample: isSampleLoaded, offline: false, jdSourceUrl, resumeFileName, proofFileName });
+  }
+
+  // 离线稳定版：始终用演示样例 + 规则路径 + 固定分数，断网或评委网络差时兜底。
+  async function runStableDemo() {
+    if (isScanning) return;
+    const data = await loadSample();
+    await runCheck({ jdText: data.jdText, resumeText: data.resumeText, evidenceText: "", inputSource: "sample", useSample: true, offline: true, proofFileName: "演示项目复盘证据" });
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("autostart") !== "1") return;
+    let cancelled = false;
+    (async () => {
+      const data = await loadSample();
+      if (cancelled) return;
+      await runCheck({ jdText: data.jdText, resumeText: data.resumeText, evidenceText: data.evidenceText, inputSource: "sample", useSample: true, proofFileName: "演示项目复盘证据" });
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <main className="app-shell commercial-shell" data-testid="screen-home">
-      <WorkbenchHeader />
-      <RolePermissionStrip expected="candidate" />
+      <CandidateHeader />
 
       <section className="workspace-hero" aria-label="咔哒工作台">
         <div className="hero-copy">
-          <span className="hero-label">岗位证据层</span>
+          <span className="hero-label">岗位证据层 · 6 智能体真实模型推理</span>
           <h2>先看证据就绪度，再决定是否投递</h2>
-          <p>导入岗位、简历和证明材料。系统只判断声明是否有证据支撑，不验证真假，不自动投递，不替企业做决定。</p>
+          <p>导入岗位与简历，6 个智能体串行调用真实大模型，只判断声明有没有证据支撑——不验真假、不自动投递。</p>
           <div className="hero-actions">
-            <button className="primary-button min-h-11 min-w-11" onClick={startCheck} disabled={!canStart || isScanning} data-testid="start-check-button" data-cta-primary="咔哒" type="button">
+            <button className="primary-button min-h-11 min-w-11" onClick={startCheck} disabled={!canStart || isScanning} data-testid="start-check-button" data-cta-primary="开始体检" type="button">
               {isScanning ? <Loader2 className="spin" size={18} /> : <Play size={18} />}
-              {isScanning ? "正在体检" : "开始体检"}
+              {isScanning ? "智能体推理中" : "开始体检（真实模型）"}
             </button>
             <button className="secondary-button min-h-11 min-w-11" onClick={loadSample} data-testid="demo-sample-button" type="button">
               <Sparkles size={18} />
               {isSampleLoaded ? "已载入样例" : "使用演示样例"}
             </button>
           </div>
+          <button className="ghost-link offline-demo-link min-h-11" onClick={runStableDemo} disabled={isScanning} data-testid="offline-demo-button" type="button">
+            <ShieldCheck size={14} />
+            离线稳定版（断网兜底，固定演示结果）
+          </button>
         </div>
-        <ScannerPanel isScanning={isScanning} canStart={canStart} onStart={startCheck} sourceCount={sourceCount} />
+        <ScannerPanel isScanning={isScanning} canStart={canStart} onStart={startCheck} sourceCount={sourceCount} agents={agents} depth={pipelineDepth} />
       </section>
 
       <section className="workbench-grid" aria-label="导入和证据护照">
@@ -229,12 +359,6 @@ export function HomeClient() {
 
       {importError ? <div className="inline-error workbench-error" data-testid="import-error"><AlertCircle size={16} />{importError}</div> : null}
 
-      <section className="commercial-bottom-grid" aria-label="最近岗位和试用空间">
-        <RecentJobsPanel />
-        <ActionPanel canStart={canStart} onStart={startCheck} />
-        <DemoEntryPanel />
-      </section>
-
       <div className="mobile-sticky-action">
         <button className="primary-button wide min-h-11 min-w-11" onClick={startCheck} disabled={!canStart || isScanning} type="button">
           {isScanning ? "正在体检" : "开始体检"}
@@ -244,14 +368,14 @@ export function HomeClient() {
   );
 }
 
-function WorkbenchHeader() {
+function CandidateHeader() {
   return (
     <header className="topbar commercial-topbar">
       <Link className="link-reset" href="/">
         <BrandLockup subtitle="岗位证据层，不是简历润色器" />
       </Link>
       <nav className="top-nav" aria-label="主要页面">
-        <Link href="/">候选人</Link>
+        <Link href="/candidate">候选人</Link>
         <Link href="/enterprise">企业</Link>
         <Link href="/school">高校</Link>
         <Link href="/admin">管理员</Link>
@@ -279,7 +403,7 @@ function JobCapturePanel(props: {
       <div className="panel-head clean">
         <div>
           <div className="panel-title"><BriefcaseBusiness size={20} />岗位捕捉</div>
-          <p>粘贴链接或岗位描述，系统会拆出岗位要求和证据偏好。</p>
+          <p>粘贴链接或 JD，自动拆出岗位要求与证据偏好。</p>
         </div>
         <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "岗位已就绪" : "等待岗位"}</span>
       </div>
@@ -352,7 +476,7 @@ function MaterialsPanel(props: {
       <div className="panel-head clean">
         <div>
           <div className="panel-title"><FileText size={20} />简历与材料库</div>
-          <p>简历只上传一次，后续岗位会复用同一份证据护照。</p>
+          <p>上传一次，后续岗位复用同一份证据护照。</p>
         </div>
         <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "简历已解析" : "等待简历"}</span>
       </div>
@@ -454,20 +578,33 @@ function ScannerPanel(props: {
   canStart: boolean;
   sourceCount: number;
   onStart: () => void;
+  agents: AgentUi[];
+  depth: string;
 }) {
   const cards = [
     ["岗位", "要求拆解", props.sourceCount >= 1],
     ["简历", "声明抽取", props.sourceCount >= 2],
     ["材料库", "证据匹配", props.sourceCount >= 3]
   ] as const;
+  const doneCount = props.agents.filter((agent) => agent.status === "done").length;
+  const modelName = props.agents.find((agent) => agent.engine && agent.engine !== "规则兜底")?.engine;
+  const modelSteps = props.agents.filter((agent) => agent.engine && agent.engine !== "规则兜底").length;
   return (
     <section className={`scanner-panel commercial-scanner ${props.isScanning ? "is-scanning" : ""}`} data-testid="scanner-section">
       <div className="scanner-panel-top">
         <div>
-          <span>安检扫描台</span>
-          <h3>把岗位要求、简历声明和证据材料对齐</h3>
+          <span>多智能体扫描台</span>
+          <h3>6 个智能体串行推理，每步都可追溯</h3>
         </div>
-        <Radar size={28} />
+        {modelName ? (
+          <span className="scanner-model-badge" data-testid="scanner-model-badge" title="本次实际调用大模型推理">
+            <Cpu size={14} />
+            {displayEngine(modelName)}
+            <b>{modelSteps}/{props.agents.length} 步真实推理</b>
+          </span>
+        ) : (
+          <Radar size={28} />
+        )}
       </div>
       <div className="scanner-gate" data-testid="scanner-gate">
         {cards.map(([title, label, active]) => (
@@ -478,89 +615,36 @@ function ScannerPanel(props: {
         ))}
         <div className="scan-beam" data-testid="scan-beam" />
       </div>
-      <div className="agent-row">
-        {["抓取岗位", "解析简历", "匹配证据", "识别缺口", "生成建议"].map((item, index) => (
-          <div className={index < props.sourceCount || props.isScanning ? "agent-node active" : "agent-node"} key={item}>
-            <ShieldCheck size={16} />
-            <span>{item}</span>
-          </div>
+      <ol className="agent-pipeline" data-testid="agent-pipeline">
+        {props.agents.map((agent, index) => (
+          <li className={`agent-step ${agent.status}`} key={agent.key} data-testid="agent-step">
+            <span className="agent-step-index">{agent.status === "done" ? <CheckCircle2 size={15} /> : agent.status === "running" ? <Loader2 className="spin" size={15} /> : index + 1}</span>
+            <div className="agent-step-body">
+              <b>{agent.label}</b>
+              <small>{agent.status === "done" ? agent.output ?? "已完成" : agent.status === "running" ? agent.role ?? "推理中…" : agent.displayName}</small>
+              {agent.status === "done" && agent.engine ? (
+                <span className="agent-step-engine" data-testid="agent-step-engine">
+                  <Cpu size={11} />
+                  {displayEngine(agent.engine)}
+                  {typeof agent.durationMs === "number" ? <em>{(agent.durationMs / 1000).toFixed(1)}s</em> : null}
+                </span>
+              ) : null}
+            </div>
+            {agent.status === "done" && typeof agent.confidence === "number" ? (
+              <span className={`agent-conf ${agent.agentStatus === "fallback" ? "fallback" : ""}`}>{agent.confidence}%</span>
+            ) : null}
+          </li>
         ))}
-      </div>
+      </ol>
       <button className="primary-button wide min-h-11 min-w-11" onClick={props.onStart} disabled={!props.canStart || props.isScanning} type="button">
         <Play size={18} />
-        {props.isScanning ? "正在生成报告" : "开始体检"}
+        {props.isScanning ? `正在推理 ${doneCount}/${props.agents.length}` : "开始体检"}
       </button>
-    </section>
-  );
-}
-
-function RecentJobsPanel() {
-  return (
-    <section className="panel recent-panel">
-      <div className="panel-head clean">
-        <div>
-          <div className="panel-title"><BriefcaseBusiness size={20} />最近岗位</div>
-          <p>按就绪度继续体检，不鼓励海投。</p>
-        </div>
-      </div>
-      <div className="job-list">
-        {recentJobs.map((job) => (
-          <article className="job-row" key={job.id}>
-            <div className={`mini-light ${job.light}`} />
-            <div>
-              <b>{job.role}</b>
-              <span>{job.company}，{job.updatedAt}</span>
-            </div>
-            <strong>{job.readiness}%</strong>
-            <small>{job.gaps} 个缺口</small>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ActionPanel({ canStart, onStart }: { canStart: boolean; onStart: () => void }) {
-  return (
-    <section className="panel next-action-panel">
-      <span className="status-pill blue">今日最佳动作</span>
-      <h2>先补“项目结果指标”这一条证据</h2>
-      <p>它同时影响用户调研、活动复盘和数据复盘三项要求，是当前最有杠杆的补证据动作。</p>
-      <button className="primary-button wide min-h-11 min-w-11" onClick={onStart} disabled={!canStart} type="button">
-        <CheckCircle2 size={18} />
-        生成体检报告
-      </button>
-    </section>
-  );
-}
-
-function DemoEntryPanel() {
-  return (
-    <section className="panel demo-entry-panel">
-      <Link href="/enterprise" className="demo-entry">
-        <Building2 size={20} />
-        <div>
-          <b>查看企业复核工作区示例</b>
-          <span>候选人队列、人工复核、补证据请求。</span>
-        </div>
-        <ArrowRight size={18} />
-      </Link>
-      <Link href="/school" className="demo-entry">
-        <GraduationCap size={20} />
-        <div>
-          <b>查看高校就业证据看板示例</b>
-          <span>准备度、缺口热力、训练包和导师待跟进。</span>
-        </div>
-        <ArrowRight size={18} />
-      </Link>
-      <Link href="/admin" className="demo-entry">
-        <ClipboardCheck size={20} />
-        <div>
-          <b>查看平台权限与审计控制台</b>
-          <span>角色模板、敏感字段过滤和模型服务状态。</span>
-        </div>
-        <ArrowRight size={18} />
-      </Link>
+      {props.depth ? (
+        <p className="scanner-depth-note">
+          {props.depth === "ai" ? "本次由模型完成全部 6 步推理。" : props.depth === "hybrid" ? "本次模型 + 规则混合完成推理。" : "本次使用规则兜底（未配置模型密钥）。"}
+        </p>
+      ) : null}
     </section>
   );
 }

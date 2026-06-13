@@ -1,17 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { Copy, ExternalLink, LockKeyhole, ShieldCheck } from "lucide-react";
 import { BrandLockup } from "@/components/brand";
 import type { EvidenceCard } from "@/lib/types";
 
 export function CardClient({ initialCard, reportId }: { initialCard: EvidenceCard | null; reportId: string }) {
+  const [shareUrl, setShareUrl] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setShareUrl(`${window.location.origin}/card/${reportId}`);
+  }, [reportId]);
+
+  async function copyShareLink() {
+    try {
+      await navigator.clipboard?.writeText(shareUrl || window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   if (!initialCard) {
     return (
       <main className="app-shell compact">
         <section className="panel empty-state">
           <h1>没有找到这张证据卡</h1>
-          <Link className="primary-link" href="/" data-empty-cta="回到咔哒台">回到咔哒台</Link>
+          <Link className="primary-link" href="/candidate" data-empty-cta="回到咔哒台">回到咔哒台</Link>
         </section>
       </main>
     );
@@ -64,9 +83,14 @@ export function CardClient({ initialCard, reportId }: { initialCard: EvidenceCar
           <p className="card-boundary" data-testid="card-boundary-note"><ShieldCheck size={16} />{initialCard.boundaryText} 此卡仅展示用户提供材料与系统解析关系，不证明材料真实。</p>
         </article>
         <aside className="panel share-panel">
-          <div className="qr-box" data-testid="card-qrcode" aria-label="扫码查看求职证据卡" />
-          <button className="primary-button wide min-h-11 min-w-11" type="button" data-testid="copy-card-link-button" data-next-step-cta="复制分享链接" onClick={() => navigator.clipboard?.writeText(location.href)}>
-            <Copy size={18} />复制分享链接
+          <div className="qr-box" data-testid="card-qrcode" aria-label="扫码查看求职证据卡">
+            {shareUrl ? (
+              <QRCodeSVG value={shareUrl} size={166} level="M" bgColor="#ffffff" fgColor="#0b0e16" marginSize={0} />
+            ) : null}
+          </div>
+          <p className="qr-caption">扫码在手机上打开这张只读证据卡</p>
+          <button className="primary-button wide min-h-11 min-w-11" type="button" data-testid="copy-card-link-button" data-next-step-cta="复制分享链接" onClick={copyShareLink}>
+            <Copy size={18} />{copied ? "链接已复制" : "复制分享链接"}
           </button>
           <Link className="secondary-link" href={`/trace/${reportId}`}><ExternalLink size={18} />查看智能体轨迹</Link>
           <Link className="secondary-link" href={`/result/${reportId}`}>返回体检结果</Link>
