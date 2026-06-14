@@ -1935,7 +1935,7 @@ summary {
   }
 }
 
-/* ===== 方案 A 升级：着陆页 / 导览条 / 多智能体扫描台 / 招聘官分身 / 证据绑定 ===== */
+/* ===== 方案 A 升级：着陆页 / 导览条 / 多智能体扫描台 / 招聘官视角 / 证据绑定 ===== */
 
 .status-pill.yellow {
   background: var(--warning-soft);
@@ -2848,7 +2848,7 @@ body:has(.cine) {
   font-weight: 800;
 }
 
-/* 结果页洞察区：招聘官分身 + 证据绑定 */
+/* 结果页洞察区：招聘官视角 + 证据绑定 */
 .result-insights {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);

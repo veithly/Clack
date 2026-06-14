@@ -538,7 +538,7 @@ async function runGapVerifier(
   return { data: fallbackGaps(mode, hasEvidence), status: "fallback", engine: "规则兜底" };
 }
 
-// Agent 5: 招聘官分身（新增能力）
+// Agent 5: 招聘官视角（新增能力）
 async function runRecruiterTwin(
   targetRole: string,
   requirements: JobRequirement[],
@@ -550,7 +550,7 @@ async function runRecruiterTwin(
   const gapList = gaps.map((g) => `${g.title}（${g.status}）`).join("；");
   const scoreFloor = mode === "evidence" ? 55 : hasEvidence ? 40 : 25;
   const scoreCeil = mode === "evidence" || hasEvidence ? 88 : 72;
-  const system = `你是招聘官分身智能体，模拟招聘官第一眼判断，但绝不替企业做录用或淘汰决定。
+  const system = `你是招聘官视角智能体，模拟招聘官第一眼判断，但绝不替企业做录用或淘汰决定。
 规则：
 - headline 不超过 24 字，是第一眼判断。
 - stance 只能是 advance（可进面追问）、hold（先补证据再投）、pass（先补关键证据，不是淘汰）之一。

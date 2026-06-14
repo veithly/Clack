@@ -45,7 +45,7 @@ export type EvidenceBinding = {
   note: string;
 };
 
-/** 招聘官分身：第一眼判断 + 追问清单，但不替企业做录用决定。 */
+/** 招聘官视角：第一眼判断 + 追问清单，但不替企业做录用决定。 */
 export type RecruiterVerdict = {
   headline: string;
   stance: "advance" | "hold" | "pass";
@@ -133,7 +133,7 @@ export type CheckReport = {
   version: number;
   /** 整份判断的综合置信度（0-100）。 */
   confidence?: number;
-  /** 招聘官分身给出的第一眼判断和追问清单。 */
+  /** 招聘官视角给出的第一眼判断和追问清单。 */
   recruiterVerdict?: RecruiterVerdict;
   /** 证明材料与简历声明的绑定结果。 */
   evidenceBindings?: EvidenceBinding[];

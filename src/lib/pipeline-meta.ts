@@ -11,7 +11,7 @@ export const PIPELINE_AGENTS: AgentMeta[] = [
   { key: "claim", name: "ResumeClaimAgent", displayName: "简历声明智能体", role: "抽取简历声明并对齐到对应岗位要求" },
   { key: "bind", name: "EvidenceBindingAgent", displayName: "证据绑定智能体", role: "把证明材料片段绑定到声明并判断匹配强度" },
   { key: "gap", name: "GapVerifierAgent", displayName: "缺口核验智能体", role: "判定每条要求的证据状态和判断置信度" },
-  { key: "recruiter", name: "RecruiterTwinAgent", displayName: "招聘官分身智能体", role: "模拟招聘官第一眼判断并生成追问清单" },
+  { key: "recruiter", name: "RecruiterTwinAgent", displayName: "招聘官视角智能体", role: "模拟招聘官第一眼判断并生成追问清单" },
   { key: "action", name: "ActionAgent", displayName: "行动建议智能体", role: "锁定唯一最高杠杆的补证据动作" }
 ];
 
@@ -21,7 +21,7 @@ export const AGENT_SHORT_LABELS: Record<string, string> = {
   claim: "抽取声明",
   bind: "绑定证据",
   gap: "核验缺口",
-  recruiter: "招聘官分身",
+  recruiter: "招聘官视角",
   action: "生成建议"
 };
 

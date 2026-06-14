@@ -190,7 +190,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { key: "claim", name: "简历声明智能体", finding: "抽取 7 条声明，6 条对齐到对应岗位要求", confidence: 88, status: "success" },
       { key: "bind", name: "证据绑定智能体", finding: "3 条声明有直接材料引用，1 条仅部分支撑", confidence: 84, status: "success" },
       { key: "gap", name: "缺口核验智能体", finding: "5 条要求中 4 条已证实，1 条（跨团队协作）证据弱", confidence: 81, status: "success" },
-      { key: "recruiter", name: "招聘官分身智能体", finding: "第一眼可进面，围绕转化率口径与个人贡献追问", confidence: 86, status: "success" },
+      { key: "recruiter", name: "招聘官视角智能体", finding: "第一眼可进面，围绕转化率口径与个人贡献追问", confidence: 86, status: "success" },
       { key: "action", name: "行动建议智能体", finding: "锁定一个最高杠杆动作：补『跨团队协作』个人动作说明", confidence: 90, status: "success" }
     ],
     matrix: [
@@ -230,7 +230,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { key: "claim", name: "简历声明智能体", finding: "抽取 6 条声明，4 条对齐到岗位要求", confidence: 83, status: "success" },
       { key: "bind", name: "证据绑定智能体", finding: "1 条直接支撑，2 条部分，数据作品链接缺失", confidence: 72, status: "success" },
       { key: "gap", name: "缺口核验智能体", finding: "6 条要求中 3 条证实、2 条弱、1 条缺证据", confidence: 76, status: "success" },
-      { key: "recruiter", name: "招聘官分身智能体", finding: "方向对，先补一个可公开访问的数据作品再投", confidence: 79, status: "success" },
+      { key: "recruiter", name: "招聘官视角智能体", finding: "方向对，先补一个可公开访问的数据作品再投", confidence: 79, status: "success" },
       { key: "action", name: "行动建议智能体", finding: "锁定动作：补一个可公开访问的数据分析作品链接", confidence: 88, status: "success" }
     ],
     matrix: [
@@ -273,7 +273,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { key: "claim", name: "简历声明智能体", finding: "抽取 8 条声明，全部对齐到岗位要求", confidence: 90, status: "success" },
       { key: "bind", name: "证据绑定智能体", finding: "5 条核心声明均有直接材料引用", confidence: 89, status: "success" },
       { key: "gap", name: "缺口核验智能体", finding: "5 条要求全部证实，无关键缺口", confidence: 88, status: "success" },
-      { key: "recruiter", name: "招聘官分身智能体", finding: "证据充分，可直接进面，追问增长归因", confidence: 90, status: "success" },
+      { key: "recruiter", name: "招聘官视角智能体", finding: "证据充分，可直接进面，追问增长归因", confidence: 90, status: "success" },
       { key: "action", name: "行动建议智能体", finding: "锁定动作：把证据同步写回简历项目经历", confidence: 86, status: "success" }
     ],
     matrix: [
@@ -312,7 +312,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { key: "claim", name: "简历声明智能体", finding: "抽取 5 条声明，仅 2 条对齐到岗位要求", confidence: 75, status: "success" },
       { key: "bind", name: "证据绑定智能体", finding: "0 条直接支撑，材料多为课堂作业", confidence: 60, status: "fallback" },
       { key: "gap", name: "缺口核验智能体", finding: "5 条要求中 1 条证实、2 条弱、2 条缺证据", confidence: 70, status: "success" },
-      { key: "recruiter", name: "招聘官分身智能体", finding: "信息不足以判断，需补研究方法与样本", confidence: 66, status: "success" },
+      { key: "recruiter", name: "招聘官视角智能体", finding: "信息不足以判断，需补研究方法与样本", confidence: 66, status: "success" },
       { key: "action", name: "行动建议智能体", finding: "锁定动作：补一份完整用户研究报告（方法+样本+结论）", confidence: 84, status: "success" }
     ],
     matrix: [
@@ -394,7 +394,7 @@ export const studentDetails: Record<string, StudentDetail> = {
     recommendedPack: "面试追问准备包",
     gaps: [
       { title: "调研样本与方法", status: "missing", flaggedBy: "缺口核验智能体", suggestion: "完成一次有样本量的真实调研。" },
-      { title: "研究结论落地", status: "missing", flaggedBy: "招聘官分身智能体", suggestion: "说明结论被谁采纳、怎么用。" }
+      { title: "研究结论落地", status: "missing", flaggedBy: "招聘官视角智能体", suggestion: "说明结论被谁采纳、怎么用。" }
     ]
   }
 };

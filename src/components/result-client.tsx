@@ -231,7 +231,7 @@ function RecruiterTwinPanel({ verdict, reportId }: { verdict: RecruiterVerdict; 
   return (
     <section className="panel recruiter-twin" data-testid="recruiter-twin">
       <div className="recruiter-twin-head">
-        <span className="status-pill blue"><UserSearch size={14} />招聘官分身</span>
+        <span className="status-pill blue"><UserSearch size={14} />招聘官视角</span>
         <span className={`stance-pill ${verdict.stance}`}>{stanceLabel}</span>
         <span className="recruiter-conf"><Gauge size={13} />置信度 {verdict.confidence}%</span>
       </div>

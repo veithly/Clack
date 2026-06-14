@@ -158,7 +158,7 @@ export function MockInterviewPanel({ reportId, questions }: { reportId: string; 
       <div className="panel-head clean">
         <div>
           <div className="panel-title"><MessageSquareText size={20} />面试追问预演</div>
-          <p>把招聘官分身的追问练一遍——你作答，模型当场判断有没有把证据缺口补上。</p>
+          <p>把招聘官视角的追问练一遍——你作答，模型当场判断有没有把证据缺口补上。</p>
         </div>
       </div>
 

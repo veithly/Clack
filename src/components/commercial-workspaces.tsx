@@ -292,7 +292,7 @@ function EvidencePackageView(props: {
 
       <section className="panel recruiter-twin package-twin" data-testid="package-recruiter">
         <div className="recruiter-twin-head">
-          <span className="status-pill blue"><UserSearch size={14} />招聘官分身</span>
+          <span className="status-pill blue"><UserSearch size={14} />招聘官视角</span>
           <span className={`stance-pill ${pkg.stance}`}>{STANCE_LABEL[pkg.stance]}</span>
           <span className="recruiter-conf"><Gauge size={13} />置信度 {pkg.confidence}%</span>
         </div>
@@ -311,7 +311,7 @@ function EvidencePackageView(props: {
             <ul>{pkg.interviewQuestions.map((item) => <li key={item}>{item}</li>)}</ul>
           </div>
         </div>
-        <p className="recruiter-boundary"><ShieldCheck size={14} />招聘官分身只给第一眼判断与追问清单，最终录用由企业人工决定。</p>
+        <p className="recruiter-boundary"><ShieldCheck size={14} />招聘官视角只给第一眼判断与追问清单，最终录用由企业人工决定。</p>
       </section>
 
       <section className="panel pkg-section">
@@ -597,7 +597,7 @@ const AGENT_NODES = [
   { name: "简历声明智能体", state: "正常" },
   { name: "证据绑定智能体", state: "正常" },
   { name: "缺口核验智能体", state: "正常" },
-  { name: "招聘官分身智能体", state: "正常" },
+  { name: "招聘官视角智能体", state: "正常" },
   { name: "行动建议智能体", state: "正常" }
 ];
 
