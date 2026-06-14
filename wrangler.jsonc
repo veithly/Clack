@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "touqian-tijian",
+  "name": "clack",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-06-08",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -11,14 +11,14 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "touqian-tijian"
+      "service": "clack"
     }
   ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "touqian-tijian-db",
-      "database_id": "dd149401-01ae-41c3-b7b2-818bf64a468c"
+      "database_name": "clack-db",
+      "database_id": "aecff7ad-7d5f-4f90-8f10-f3fb4537db49"
     }
   ],
   "vars": {

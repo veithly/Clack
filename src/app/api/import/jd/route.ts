@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   try {
     const upstream = await fetch(url, {
       headers: {
-        "User-Agent": "ClackBot/1.0 (+https://touqian-tijian.veithly.workers.dev)",
+        "User-Agent": "ClackBot/1.0 (+https://clack.veithly.workers.dev)",
         Accept: "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5"
       },
       redirect: "follow",

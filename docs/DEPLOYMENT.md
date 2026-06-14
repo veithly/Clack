@@ -8,17 +8,17 @@ PDF 简历解析发生在浏览器端，静态 worker 文件位于 `public/vendo
 
 | 名称 | 类型 | 用途 | 设置方式 |
 | --- | --- | --- | --- |
-| `DB` | Cloudflare D1 | 保存体检报告、`sessionId`、`ownerId`、`shareToken` 和报告 JSON | `wrangler d1 create touqian-tijian-db` 后回填 `wrangler.jsonc` |
+| `DB` | Cloudflare D1 | 保存体检报告、`sessionId`、`ownerId`、`shareToken` 和报告 JSON | `wrangler d1 create clack-db` 后回填 `wrangler.jsonc` |
 | `OPENAI_API_KEY` | Worker Secret | 接入 OpenAI-compatible 模型 | `wrangler secret put OPENAI_API_KEY` |
-| `OPENAI_BASE_URL` | Worker Vars | 当前 `https://api.stepfun.com/step_plan/v1` | 已写入 `wrangler.jsonc` |
-| `OPENAI_DEFAULT_MODEL` | Worker Vars | 当前 `step-3.7-flash` | 已写入 `wrangler.jsonc` |
+| `OPENAI_BASE_URL` | Worker Vars | 当前 `https://api.stepfun.com/v1` | 已写入 `wrangler.jsonc` |
+| `OPENAI_DEFAULT_MODEL` | Worker Vars | 当前 `step-2-mini` | 已写入 `wrangler.jsonc` |
 
 ## 首次部署
 
 ```bash
 npm install
 npx wrangler login
-npx wrangler d1 create touqian-tijian-db
+npx wrangler d1 create clack-db
 ```
 
 把命令返回的 `database_id` 写入 `wrangler.jsonc` 的 `d1_databases[0].database_id`。
@@ -53,20 +53,20 @@ PLAYWRIGHT_BASE_URL=https://<your-worker>.workers.dev npm run test:e2e
 当前正式地址：
 
 ```text
-https://touqian-tijian.veithly.workers.dev
+https://clack.veithly.workers.dev
 ```
 
 当前部署版本：
 
 ```text
-79f61681-1597-4e39-ac24-66d711b49740
+4d8a9ee3-a1fa-4e53-9aa5-31edfa8a6375
 ```
 
 最新公开验证：
 
 ```text
-2026-06-13 13:18:48 +08:00
-Workers 首页 200；页面标题为“咔哒 / Clack”；线上样例报告接口返回正常；多用户权限切换覆盖候选人、企业复核员、高校导师和平台管理员；Playwright 桌面端 role-flow 通过，onboard 首次冷启动后重试通过。
+2026-06-15 00:00:58 +08:00
+Workers 首页 200；页面标题为“咔哒 / Clack”；metadata 和 User-Agent 已切到 clack.veithly.workers.dev；Playwright 线上桌面端 hero-flow 通过。
 ```
 
 ## 边界

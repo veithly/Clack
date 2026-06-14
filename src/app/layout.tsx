@@ -11,7 +11,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://touqian-tijian.veithly.workers.dev"),
+  metadataBase: new URL("https://clack.veithly.workers.dev"),
   title: "咔哒 / Clack — 投之前，咔哒一下",
   description: "投之前，咔哒一下：把岗位和简历贴在一起，6 个智能体逐条核证据，30 秒给一个能不能投的判断。",
   openGraph: {
