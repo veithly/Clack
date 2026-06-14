@@ -7,6 +7,8 @@ node_modules/
 .pw-browsers/
 test-results/
 playwright-report/
+.next-dev.log
+playwright-dev-server*.log
 outputs/
 artifacts/
 pitch/

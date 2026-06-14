@@ -56,7 +56,7 @@ export function ProductHeader({ title, subtitle }: { title: string; subtitle: st
         <Link href="/school">高校</Link>
         <Link href="/admin">管理员</Link>
       </nav>
-      <div className="boundary-note"><LockKeyhole size={16} />只整理可证明性，不做录用决定</div>
+      <div className="boundary-note"><LockKeyhole size={16} />仅整理可证明性，不替企业做录用决定</div>
     </header>
   );
 }
@@ -127,13 +127,13 @@ export function PassportWorkspace() {
 }
 
 const LIGHT_LABEL: Record<CandidateEvidencePackage["trafficLight"], string> = {
-  green: "证据充分可进面",
+  green: "初步建议：可进面",
   yellow: "需补 1 条关键证据",
-  red: "证据不足暂难判断"
+  red: "证据不足，暂无法判断"
 };
 
 const STANCE_LABEL: Record<CandidateEvidencePackage["stance"], string> = {
-  advance: "建议进面追问",
+  advance: "重点追问",
   hold: "先补证据再约",
   pass: "暂不推进"
 };
@@ -147,7 +147,7 @@ function statusToBadge(status: PackageMatrixRow["status"]) {
 function defaultRequest(pkg: CandidateEvidencePackage) {
   const top = pkg.gaps[0];
   if (!top) return "证据已较充分，可邀约面试，围绕证据现场追问即可。";
-  return `请补充「${top.title}」：${top.missing}。补齐后我会重新人工复核。`;
+  return `请补充「${top.title}」：${top.missing}。补充后将重新进入人工复核。`;
 }
 
 export function EnterpriseWorkspace() {
@@ -179,20 +179,20 @@ export function EnterpriseWorkspace() {
 
   function setConclusion(choice: string) {
     setReviewChoice(choice);
-    setExtraLog((prev) => [{ at: "现在", actor: "周晨", action: `人工复核结论：${choice}` }, ...prev]);
+    setExtraLog((prev) => [{ at: "现在", actor: "周晨", action: `人工复核判断：${choice}` }, ...prev]);
   }
 
   return (
     <main className="app-shell commercial-shell" data-testid="screen-enterprise">
-      <ProductHeader title="企业复核工作区" subtitle="只看授权证据，人工下结论" />
+      <ProductHeader title="企业证据复核台" subtitle="只查看候选人授权材料，最终结论由人工确认" />
       <section className="enterprise-grid">
         <section className="panel candidate-queue">
           <div className="panel-head clean">
             <div>
-              <div className="panel-title"><Building2 size={20} />候选人证据队列</div>
-              <p>按提交时间排列，不做 AI 自动排名。</p>
+              <div className="panel-title"><Building2 size={20} />候选人复核队列</div>
+              <p>按提交时间排序，不做 AI 排名或淘汰。</p>
             </div>
-            <span className="status-pill neutral">0 自动淘汰</span>
+            <span className="status-pill neutral">0 AI 淘汰</span>
           </div>
           <div className="candidate-table">
             <div className="candidate-row head">
@@ -203,7 +203,7 @@ export function EnterpriseWorkspace() {
                 <span>{item.candidate}<small>{item.id} · {item.submittedAt}</small></span>
                 <span>{item.role}</span>
                 <strong>{item.readiness}%</strong>
-                <span>{item.gaps} 个</span>
+                <span>{item.gaps} 个缺口</span>
                 <b>{item.status}</b>
               </button>
             ))}
@@ -236,7 +236,7 @@ export function EnterpriseWorkspace() {
         <ShieldCheck size={22} />
         <div>
           <h2>合规边界常驻</h2>
-          <p>只整理可证明性：不验真假、不替代背调、不作录用决定、敏感字段不进入判断。</p>
+          <p>仅整理可证明性：不验真假、不替代背调、不作录用决定、敏感字段不进入判断。</p>
         </div>
       </section>
     </main>
@@ -278,13 +278,17 @@ function EvidencePackageView(props: {
 
       <div className="review-control" data-testid="review-control">
         <div className="review-control-head">
-          <b>人工复核结论</b>
-          <span>{props.reviewChoice ? `已选：${props.reviewChoice}` : "结论仅三档，录用与否由企业人工决定"}</span>
+          <b>人工复核判断</b>
+          <span>{props.reviewChoice ? `已选：${props.reviewChoice}` : "复核只标记证据状态，录用决定仍由企业人工作出"}</span>
         </div>
         <div className="review-options">
-          {["证据充分", "需补充", "无法判断"].map((item) => (
-            <button className={`secondary-button min-h-11 ${props.reviewChoice === item ? "is-selected" : ""}`} onClick={() => props.onConclusion(item)} type="button" key={item} data-testid={`conclusion-${item}`}>
-              {item}
+          {[
+            ["证据充分", "证据充分"],
+            ["需补充", "需要补证"],
+            ["无法判断", "暂无法判断"]
+          ].map(([testId, label]) => (
+            <button className={`secondary-button min-h-11 ${props.reviewChoice === label ? "is-selected" : ""}`} onClick={() => props.onConclusion(label)} type="button" key={testId} data-testid={`conclusion-${testId}`}>
+              {label}
             </button>
           ))}
         </div>
@@ -299,26 +303,26 @@ function EvidencePackageView(props: {
         <h2>{pkg.recruiterHeadline}</h2>
         <div className="recruiter-twin-grid">
           <div className="twin-col">
-            <b className="twin-col-title good">第一眼亮点</b>
+            <b className="twin-col-title good">支持进面的证据</b>
             <ul>{pkg.strengths.map((item) => <li key={item}>{item}</li>)}</ul>
           </div>
           <div className="twin-col">
-            <b className="twin-col-title warn">主要顾虑</b>
+            <b className="twin-col-title warn">待核实问题</b>
             <ul>{pkg.concerns.map((item) => <li key={item}>{item}</li>)}</ul>
           </div>
           <div className="twin-col questions">
-            <b className="twin-col-title"><HelpCircle size={14} />面试会追问</b>
+            <b className="twin-col-title"><HelpCircle size={14} />建议追问</b>
             <ul>{pkg.interviewQuestions.map((item) => <li key={item}>{item}</li>)}</ul>
           </div>
         </div>
-        <p className="recruiter-boundary"><ShieldCheck size={14} />招聘官视角只给第一眼判断与追问清单，最终录用由企业人工决定。</p>
+        <p className="recruiter-boundary"><ShieldCheck size={14} />招聘官视角只提供证据判断与追问建议，最终录用由企业人工决定。</p>
       </section>
 
       <section className="panel pkg-section">
         <div className="panel-head clean">
           <div>
-            <div className="panel-title"><Cpu size={20} />6 智能体如何得出这份证据包</div>
-            <p>每一步都有产出和置信度，企业可逐条核对，不是一次黑箱打分。</p>
+            <div className="panel-title"><Cpu size={20} />证据包生成过程</div>
+            <p>每一步都有来源、产出和置信度，企业可逐条核对，不依赖黑箱评分。</p>
           </div>
         </div>
         <ol className="pkg-agents" data-testid="pkg-agents">
@@ -332,12 +336,12 @@ function EvidencePackageView(props: {
         <div className="panel-head clean">
           <div>
             <div className="panel-title"><Activity size={20} />证据矩阵</div>
-            <p>每行都能追到岗位要求、候选人声明、引用证据与状态。</p>
+            <p>每一行都对应岗位要求、候选人经历、引用材料和证据状态。</p>
           </div>
         </div>
         <div className="evidence-matrix">
           <div className="matrix-row matrix-head">
-            <span>岗位要求</span><span>候选人声明</span><span>引用证据</span><span>状态</span><span>权重</span>
+            <span>岗位要求</span><span>候选人经历</span><span>引用材料</span><span>状态</span><span>重要性</span>
           </div>
           {pkg.matrix.map((row) => (
             <details className="matrix-row" key={row.requirement} open={row.status !== "proven"}>
@@ -360,8 +364,8 @@ function EvidencePackageView(props: {
         <section className="panel pkg-section">
           <div className="panel-head clean">
             <div>
-              <div className="panel-title"><Link2 size={20} />证据绑定</div>
-              <p>每条声明背后到底有没有材料撑。</p>
+              <div className="panel-title"><Link2 size={20} />证据匹配</div>
+              <p>逐条查看候选人经历是否有材料支撑。</p>
             </div>
           </div>
           <div className="binding-list">
@@ -392,7 +396,7 @@ function EvidencePackageView(props: {
         <div className="panel-head clean">
           <div>
             <div className="panel-title"><MessageSquareText size={20} />补证据请求</div>
-            <p>候选人补充后只发更新提醒，不自动改结论。</p>
+            <p>候选人补充后只更新证据状态，不自动改变复核判断。</p>
           </div>
         </div>
         <div className="request-box">

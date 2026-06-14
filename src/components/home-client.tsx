@@ -292,22 +292,22 @@ export function HomeClient() {
 
       <section className="workspace-hero" aria-label="咔哒工作台">
         <div className="hero-copy">
-          <span className="hero-label">岗位证据层 · 6 智能体真实模型推理</span>
-          <h2>先看证据就绪度，再决定是否投递</h2>
-          <p>导入岗位与简历，6 个智能体串行调用真实大模型，只判断声明有没有证据支撑——不验真假、不自动投递。</p>
+          <span className="hero-label">岗位证据层 · 6 步智能体检查</span>
+          <h2>先验证岗位匹配证据，再决定是否投递</h2>
+          <p>导入岗位、简历和证明材料，系统会逐项检查你的经历描述是否有证据支撑；只做投递前判断，不自动投递。</p>
           <div className="hero-actions">
             <button className="primary-button min-h-11 min-w-11" onClick={startCheck} disabled={!canStart || isScanning} data-testid="start-check-button" data-cta-primary="开始体检" type="button">
               {isScanning ? <Loader2 className="spin" size={18} /> : <Play size={18} />}
-              {isScanning ? "智能体推理中" : "开始体检（真实模型）"}
+              {isScanning ? "正在检查证据" : "开始匹配检查"}
             </button>
             <button className="secondary-button min-h-11 min-w-11" onClick={loadSample} data-testid="demo-sample-button" type="button">
               <Sparkles size={18} />
-              {isSampleLoaded ? "已载入样例" : "使用演示样例"}
+              {isSampleLoaded ? "已载入示例" : "使用示例数据"}
             </button>
           </div>
           <button className="ghost-link offline-demo-link min-h-11" onClick={runStableDemo} disabled={isScanning} data-testid="offline-demo-button" type="button">
             <ShieldCheck size={14} />
-            离线稳定版（断网兜底，固定演示结果）
+            离线演示模式：断网可用，结果固定
           </button>
         </div>
         <ScannerPanel isScanning={isScanning} canStart={canStart} onStart={startCheck} sourceCount={sourceCount} agents={agents} depth={pipelineDepth} />
@@ -361,7 +361,7 @@ export function HomeClient() {
 
       <div className="mobile-sticky-action">
         <button className="primary-button wide min-h-11 min-w-11" onClick={startCheck} disabled={!canStart || isScanning} type="button">
-          {isScanning ? "正在体检" : "开始体检"}
+          {isScanning ? "正在检查" : "开始匹配检查"}
         </button>
       </div>
     </main>
@@ -402,19 +402,19 @@ function JobCapturePanel(props: {
     <section className="panel capture-panel">
       <div className="panel-head clean">
         <div>
-          <div className="panel-title"><BriefcaseBusiness size={20} />岗位捕捉</div>
-          <p>粘贴链接或 JD，自动拆出岗位要求与证据偏好。</p>
+          <div className="panel-title"><BriefcaseBusiness size={20} />导入目标岗位</div>
+          <p>粘贴岗位链接或 JD，系统会提取关键要求和匹配重点。</p>
         </div>
-        <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "岗位已就绪" : "等待岗位"}</span>
+        <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "岗位已就绪" : "待导入岗位"}</span>
       </div>
       <div className="capture-body">
         <label className="url-import">
-          <span><Link2 size={16} />岗位链接</span>
+          <span><Link2 size={16} />岗位链接或 JD 链接</span>
           <input data-testid="jd-url-input" value={props.jdUrl} onChange={(event) => props.onUrlChange(event.target.value)} aria-label="公开岗位详情页 URL" placeholder="https://example.com/job/123" />
         </label>
         <button className="secondary-button min-h-11 min-w-11" onClick={props.onImport} disabled={props.isImportingJd || !props.jdUrl.trim()} data-testid="import-jd-url-button" type="button">
           {props.isImportingJd ? <Loader2 className="spin" size={18} /> : <RefreshCcw size={18} />}
-          {props.isImportingJd ? "正在拉取" : "拉取岗位"}
+          {props.isImportingJd ? "正在解析" : "解析岗位"}
         </button>
       </div>
       <textarea
@@ -423,10 +423,10 @@ function JobCapturePanel(props: {
         value={props.jdText}
         onChange={(event) => props.onTextChange(event.target.value)}
         aria-label="岗位描述"
-        placeholder="也可以直接粘贴岗位 JD。"
+        placeholder="也可以直接粘贴完整 JD 文本。"
       />
       <div className="source-summary">
-        <span className={ready ? "receipt-chip done" : "receipt-chip"}>{props.jdSourceUrl ? "JD 已从链接拉取" : ready ? "岗位来自粘贴文本" : "等待岗位"}</span>
+        <span className={ready ? "receipt-chip done" : "receipt-chip"}>{props.jdSourceUrl ? "JD 已从链接解析" : ready ? "岗位来自粘贴文本" : "待导入岗位"}</span>
         <span className="receipt-chip">已输入 {props.jdText.length} 字</span>
       </div>
     </section>
@@ -445,13 +445,13 @@ function ImportReceipts(props: {
   return (
     <div className="source-summary import-receipts-strip" data-testid="import-receipts" aria-label="导入收据">
       <span className={hasJd ? "receipt-chip done" : "receipt-chip"}>
-        {props.jdSourceUrl ? "JD 已从链接拉取" : hasJd ? "岗位来自粘贴文本" : "等待岗位"}
+        {props.jdSourceUrl ? "JD 已从链接解析" : hasJd ? "岗位来自粘贴文本" : "待导入岗位"}
       </span>
       <span className={hasResume ? "receipt-chip done" : "receipt-chip"}>
-        {props.resumeFileName ? `简历文件：${props.resumeFileName}` : hasResume ? "简历已粘贴" : "等待简历"}
+        {props.resumeFileName ? `简历文件：${props.resumeFileName}` : hasResume ? "简历已粘贴" : "待上传简历"}
       </span>
       <span className={props.proofFileName ? "receipt-chip done" : "receipt-chip"}>
-        {props.proofFileName ? `证明材料：${props.proofFileName}` : "证明材料可稍后补"}
+        {props.proofFileName ? `证明材料：${props.proofFileName}` : "可稍后补充证明材料"}
       </span>
     </div>
   );
@@ -475,10 +475,10 @@ function MaterialsPanel(props: {
     <section className="panel materials-panel">
       <div className="panel-head clean">
         <div>
-          <div className="panel-title"><FileText size={20} />简历与材料库</div>
-          <p>上传一次，后续岗位复用同一份证据护照。</p>
+          <div className="panel-title"><FileText size={20} />上传简历与证明材料</div>
+          <p>简历用于提取经历，证明材料用于支撑这些经历。</p>
         </div>
-        <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "简历已解析" : "等待简历"}</span>
+        <span className={ready ? "status-pill green" : "status-pill neutral"}>{ready ? "简历已解析" : "待上传简历"}</span>
       </div>
       <div className="material-actions">
         <input ref={props.fileInputRef} className="hidden-file-input" type="file" accept=".pdf,.txt,.md,text/plain,application/pdf" onChange={props.onResumeFile} data-testid="resume-file-input" />
@@ -493,7 +493,7 @@ function MaterialsPanel(props: {
         </button>
         <Link className="secondary-link min-h-11 min-w-11" href="/passport">
           <ClipboardCheck size={18} />
-          从证据护照选择
+          从已有材料选择
         </Link>
       </div>
       <textarea
@@ -502,7 +502,7 @@ function MaterialsPanel(props: {
         value={props.resumeText}
         onChange={(event) => props.onResumeTextChange(event.target.value)}
         aria-label="简历文本"
-        placeholder="上传 PDF/TXT，或直接粘贴简历文本。"
+        placeholder="可上传 PDF/TXT，也可以直接粘贴简历内容。"
       />
       <div className="material-list">
         {props.proofFileName ? (
@@ -520,15 +520,15 @@ function MaterialsPanel(props: {
             <span>{item.type}</span>
             <div>
               <b>{item.title}</b>
-              <small>{item.source}，{item.claims} 条声明，{item.evidenceLinks} 条引用</small>
+              <small>{item.source}，{item.claims} 条经历，{item.evidenceLinks} 条材料引用</small>
             </div>
-            <em>{item.status}</em>
+            <em>{item.status === "已解析" ? "已提取" : item.status}</em>
           </article>
         ))}
       </div>
       <div className="source-summary">
-        <span className={props.resumeFileName ? "receipt-chip done" : "receipt-chip"}>{props.resumeFileName ? `简历文件：${props.resumeFileName}` : ready ? "简历已粘贴" : "等待简历"}</span>
-        <span className={props.proofFileName ? "receipt-chip done" : "receipt-chip"}>{props.proofFileName ? `证明材料：${props.proofFileName}` : "证明材料可稍后补"}</span>
+        <span className={props.resumeFileName ? "receipt-chip done" : "receipt-chip"}>{props.resumeFileName ? `简历文件：${props.resumeFileName}` : ready ? "简历已粘贴" : "待上传简历"}</span>
+        <span className={props.proofFileName ? "receipt-chip done" : "receipt-chip"}>{props.proofFileName ? `证明材料：${props.proofFileName}` : "可稍后补充证明材料"}</span>
       </div>
     </section>
   );
@@ -536,17 +536,17 @@ function MaterialsPanel(props: {
 
 function PassportPanel({ hasResume, hasProof }: { hasResume: boolean; hasProof: boolean }) {
   const stats = [
-    ["声明", hasResume ? "8" : "0"],
-    ["已绑定证据", hasProof ? "6" : hasResume ? "2" : "0"],
-    ["对外可见", hasProof ? "3" : "0"],
-    ["待补证据", hasResume ? (hasProof ? "1" : "3") : "0"]
+    ["简历经历", hasResume ? "8" : "0"],
+    ["已匹配材料", hasProof ? "6" : hasResume ? "2" : "0"],
+    ["可分享材料", hasProof ? "3" : "0"],
+    ["待补材料", hasResume ? (hasProof ? "1" : "3") : "0"]
   ];
   return (
     <section className="panel passport-panel">
       <div className="panel-head clean">
         <div>
-          <div className="panel-title"><ClipboardCheck size={20} />证据护照</div>
-          <p>默认私密，分享前需要确认可见范围。</p>
+          <div className="panel-title"><ClipboardCheck size={20} />证据状态</div>
+          <p>汇总你的经历、证明材料和可见范围，默认仅自己可见。</p>
         </div>
         <span className={hasResume ? "status-pill blue" : "status-pill neutral"}>{hasResume ? "可证明性待确认" : "未生成"}</span>
       </div>
@@ -554,7 +554,7 @@ function PassportPanel({ hasResume, hasProof }: { hasResume: boolean; hasProof: 
         <div className={hasResume ? "passport-light yellow" : "passport-light neutral"} />
         <div>
           <b>{hasResume ? "62%" : "0%"}</b>
-          <span>岗位证据就绪度</span>
+          <span>岗位匹配证据完成度</span>
         </div>
       </div>
       <div className="passport-stats">
@@ -567,7 +567,7 @@ function PassportPanel({ hasResume, hasProof }: { hasResume: boolean; hasProof: 
       </div>
       <div className="passport-note">
         <LockKeyhole size={16} />
-        可见性：私密、对企业可见、对高校导师可见、公开链接可见。
+        可见性：默认私密；分享前可选择对企业可见或通过公开链接查看。
       </div>
     </section>
   );
@@ -582,9 +582,9 @@ function ScannerPanel(props: {
   depth: string;
 }) {
   const cards = [
-    ["岗位", "要求拆解", props.sourceCount >= 1],
-    ["简历", "声明抽取", props.sourceCount >= 2],
-    ["材料库", "证据匹配", props.sourceCount >= 3]
+    ["目标岗位", "解析要求", props.sourceCount >= 1],
+    ["我的简历", "提取经历", props.sourceCount >= 2],
+    ["证明材料", "匹配证据", props.sourceCount >= 3]
   ] as const;
   const doneCount = props.agents.filter((agent) => agent.status === "done").length;
   const modelName = props.agents.find((agent) => agent.engine && agent.engine !== "规则兜底")?.engine;
@@ -594,7 +594,7 @@ function ScannerPanel(props: {
       <div className="scanner-panel-top">
         <div>
           <span>多智能体扫描台</span>
-          <h3>6 个智能体串行推理，每步都可追溯</h3>
+          <h3>6 步完成投递前证据检查</h3>
         </div>
         {modelName ? (
           <span className="scanner-model-badge" data-testid="scanner-model-badge" title="本次实际调用大模型推理">
@@ -638,7 +638,7 @@ function ScannerPanel(props: {
       </ol>
       <button className="primary-button wide min-h-11 min-w-11" onClick={props.onStart} disabled={!props.canStart || props.isScanning} type="button">
         <Play size={18} />
-        {props.isScanning ? `正在推理 ${doneCount}/${props.agents.length}` : "开始体检"}
+        {props.isScanning ? `正在检查 ${doneCount}/${props.agents.length}` : "开始匹配检查"}
       </button>
       {props.depth ? (
         <p className="scanner-depth-note">

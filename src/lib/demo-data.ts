@@ -177,7 +177,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
     trafficLight: "green",
     stance: "advance",
     confidence: 86,
-    recruiterHeadline: "第一眼：方向匹配，可进面，重点追问转化率口径与个人贡献",
+    recruiterHeadline: "初步判断：方向匹配，可进入面试复核；重点追问转化率口径与个人贡献",
     strengths: ["用户调研有真实样本量（86 人）", "活动转化率有前后对比数据", "报名页优化动作链路清晰"],
     concerns: ["跨团队协作只有描述，缺个人动作", "转化率统计口径需现场确认"],
     interviewQuestions: [
@@ -186,12 +186,12 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       "协作项目里哪一段是你独立负责的？"
     ],
     agentRun: [
-      { key: "jd", name: "岗位解析智能体", finding: "拆出 5 条要求，2 条高权重：用户调研、用数据复盘活动效果", confidence: 92, status: "success" },
-      { key: "claim", name: "简历声明智能体", finding: "抽取 7 条声明，6 条对齐到对应岗位要求", confidence: 88, status: "success" },
-      { key: "bind", name: "证据绑定智能体", finding: "3 条声明有直接材料引用，1 条仅部分支撑", confidence: 84, status: "success" },
-      { key: "gap", name: "缺口核验智能体", finding: "5 条要求中 4 条已证实，1 条（跨团队协作）证据弱", confidence: 81, status: "success" },
-      { key: "recruiter", name: "招聘官视角智能体", finding: "第一眼可进面，围绕转化率口径与个人贡献追问", confidence: 86, status: "success" },
-      { key: "action", name: "行动建议智能体", finding: "锁定一个最高杠杆动作：补『跨团队协作』个人动作说明", confidence: 90, status: "success" }
+      { key: "jd", name: "岗位要求解析", finding: "拆出 5 条要求，2 条高重要性：用户调研、用数据复盘活动效果", confidence: 92, status: "success" },
+      { key: "claim", name: "简历经历提取", finding: "提取 7 条经历，6 条对齐到对应岗位要求", confidence: 88, status: "success" },
+      { key: "bind", name: "证据匹配", finding: "3 条经历有直接材料引用，1 条仅部分支撑", confidence: 84, status: "success" },
+      { key: "gap", name: "证据缺口核验", finding: "5 条要求中 4 条已证实，1 条（跨团队协作）证据弱", confidence: 81, status: "success" },
+      { key: "recruiter", name: "面试关注点生成", finding: "建议进入面试复核，重点追问转化率口径与个人贡献", confidence: 86, status: "success" },
+      { key: "action", name: "补证建议生成", finding: "锁定一个最高收益动作：补『跨团队协作』个人动作说明", confidence: 90, status: "success" }
     ],
     matrix: [
       { requirement: "用户调研能力", weight: "high", claim: "负责问卷调研与流失分析", evidence: "调研 86 人样本 + 2 个流失点结论", status: "proven", detail: "岗位要求参与用户调研；已有样本量与可复述结论。" },
@@ -209,7 +209,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { title: "跨团队协作的个人动作", impact: "中影响", missing: "你主导的协作环节与可衡量产出", status: "weak" },
       { title: "产品体验分析深度", impact: "低影响", missing: "分析方法、对比与结论", status: "weak" }
     ],
-    reviewLog: [{ at: "10:16", actor: "系统", action: "生成岗位证据就绪度 78，等待人工复核" }]
+    reviewLog: [{ at: "10:16", actor: "系统", action: "生成岗位匹配证据完成度 78，等待人工复核" }]
   },
   "C-2049": {
     authorizedScope: "数据分析岗位只读证据卡（作品链接待补）",
@@ -217,7 +217,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
     trafficLight: "yellow",
     stance: "hold",
     confidence: 76,
-    recruiterHeadline: "第一眼：基础在，但缺可验证的数据作品，建议先补再约面",
+    recruiterHeadline: "初步判断：基础匹配，但缺可验证的数据作品；建议先补证据再约面",
     strengths: ["能给出业务向的数据结论", "工具栈（Excel/Python）覆盖基础需求"],
     concerns: ["没有可访问的数据可视化作品", "SQL 取数仅停留在课程描述"],
     interviewQuestions: [
@@ -226,12 +226,12 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       "如果给你一份脏数据，你的清洗流程是什么？"
     ],
     agentRun: [
-      { key: "jd", name: "岗位解析智能体", finding: "拆出 6 条要求，高权重：SQL 取数、数据可视化、业务结论", confidence: 90, status: "success" },
-      { key: "claim", name: "简历声明智能体", finding: "抽取 6 条声明，4 条对齐到岗位要求", confidence: 83, status: "success" },
-      { key: "bind", name: "证据绑定智能体", finding: "1 条直接支撑，2 条部分，数据作品链接缺失", confidence: 72, status: "success" },
-      { key: "gap", name: "缺口核验智能体", finding: "6 条要求中 3 条证实、2 条弱、1 条缺证据", confidence: 76, status: "success" },
-      { key: "recruiter", name: "招聘官视角智能体", finding: "方向对，先补一个可公开访问的数据作品再投", confidence: 79, status: "success" },
-      { key: "action", name: "行动建议智能体", finding: "锁定动作：补一个可公开访问的数据分析作品链接", confidence: 88, status: "success" }
+      { key: "jd", name: "岗位要求解析", finding: "拆出 6 条要求，高重要性：SQL 取数、数据可视化、业务结论", confidence: 90, status: "success" },
+      { key: "claim", name: "简历经历提取", finding: "提取 6 条经历，4 条对齐到岗位要求", confidence: 83, status: "success" },
+      { key: "bind", name: "证据匹配", finding: "1 条直接支撑，2 条部分支撑，数据作品链接缺失", confidence: 72, status: "success" },
+      { key: "gap", name: "证据缺口核验", finding: "6 条要求中 3 条证实、2 条弱、1 条缺证据", confidence: 76, status: "success" },
+      { key: "recruiter", name: "面试关注点生成", finding: "方向匹配，先补一个可公开访问的数据作品再约面", confidence: 79, status: "success" },
+      { key: "action", name: "补证建议生成", finding: "锁定动作：补一个可公开访问的数据分析作品链接", confidence: 88, status: "success" }
     ],
     matrix: [
       { requirement: "SQL 取数与清洗", weight: "high", claim: "熟悉 SQL 基础查询", evidence: "课程作业描述", status: "weak", detail: "仍需：线上可见或可复述的真实取数案例。" },
@@ -250,7 +250,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { title: "A/B 实验经历", impact: "中影响", missing: "实验设计与读数", status: "weak" }
     ],
     reviewLog: [
-      { at: "10:22", actor: "系统", action: "生成岗位证据就绪度 64" },
+      { at: "10:22", actor: "系统", action: "生成岗位匹配证据完成度 64" },
       { at: "10:25", actor: "周晨", action: "已发送补证据请求：补一个可访问的数据作品链接" }
     ]
   },
@@ -260,7 +260,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
     trafficLight: "green",
     stance: "advance",
     confidence: 90,
-    recruiterHeadline: "第一眼：证据充分，建议直接进面，围绕增长归因追问",
+    recruiterHeadline: "初步判断：证据充分，可进入面试复核；重点追问增长归因",
     strengths: ["账号从 0 做到 1.2w 粉丝，有过程数据", "单篇 10w+ 阅读爆款有完整复盘", "跨平台分发与社群运营都有材料"],
     concerns: ["增长归因里平台红利与个人动作需区分"],
     interviewQuestions: [
@@ -269,12 +269,12 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       "社群运营的留存数据是多少？"
     ],
     agentRun: [
-      { key: "jd", name: "岗位解析智能体", finding: "拆出 5 条要求，高权重：选题策划、数据增长", confidence: 91, status: "success" },
-      { key: "claim", name: "简历声明智能体", finding: "抽取 8 条声明，全部对齐到岗位要求", confidence: 90, status: "success" },
-      { key: "bind", name: "证据绑定智能体", finding: "5 条核心声明均有直接材料引用", confidence: 89, status: "success" },
-      { key: "gap", name: "缺口核验智能体", finding: "5 条要求全部证实，无关键缺口", confidence: 88, status: "success" },
-      { key: "recruiter", name: "招聘官视角智能体", finding: "证据充分，可直接进面，追问增长归因", confidence: 90, status: "success" },
-      { key: "action", name: "行动建议智能体", finding: "锁定动作：把证据同步写回简历项目经历", confidence: 86, status: "success" }
+      { key: "jd", name: "岗位要求解析", finding: "拆出 5 条要求，高重要性：选题策划、数据增长", confidence: 91, status: "success" },
+      { key: "claim", name: "简历经历提取", finding: "提取 8 条经历，全部对齐到岗位要求", confidence: 90, status: "success" },
+      { key: "bind", name: "证据匹配", finding: "5 条核心经历均有直接材料引用", confidence: 89, status: "success" },
+      { key: "gap", name: "证据缺口核验", finding: "5 条要求全部证实，无关键缺口", confidence: 88, status: "success" },
+      { key: "recruiter", name: "面试关注点生成", finding: "证据充分，可进入面试复核，追问增长归因", confidence: 90, status: "success" },
+      { key: "action", name: "补证建议生成", finding: "锁定动作：把证据同步写回简历项目经历", confidence: 86, status: "success" }
     ],
     matrix: [
       { requirement: "选题与内容策划", weight: "high", claim: "独立负责账号选题", evidence: "选题表 + 30 篇内容记录", status: "proven", detail: "有完整选题与产出记录。" },
@@ -289,7 +289,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
     ],
     gaps: [],
     reviewLog: [
-      { at: "10:31", actor: "系统", action: "生成岗位证据就绪度 82" },
+      { at: "10:31", actor: "系统", action: "生成岗位匹配证据完成度 82" },
       { at: "10:34", actor: "周晨", action: "标记为证据充分，进入面试排期" }
     ]
   },
@@ -299,7 +299,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
     trafficLight: "red",
     stance: "pass",
     confidence: 66,
-    recruiterHeadline: "第一眼：方向相关但证据不足，暂无法判断，建议补研究报告",
+    recruiterHeadline: "初步判断：方向相关但证据不足，暂无法判断；建议补研究报告",
     strengths: ["对用户研究方向有明确兴趣", "修过研究方法相关课程"],
     concerns: ["材料多为课堂作业，缺真实研究", "没有样本规模与抽样说明", "结论缺少落地动作"],
     interviewQuestions: [
@@ -308,12 +308,12 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       "研究结论最后被谁用了，怎么用的？"
     ],
     agentRun: [
-      { key: "jd", name: "岗位解析智能体", finding: "拆出 5 条要求，高权重：研究方法、样本设计", confidence: 89, status: "success" },
-      { key: "claim", name: "简历声明智能体", finding: "抽取 5 条声明，仅 2 条对齐到岗位要求", confidence: 75, status: "success" },
-      { key: "bind", name: "证据绑定智能体", finding: "0 条直接支撑，材料多为课堂作业", confidence: 60, status: "fallback" },
-      { key: "gap", name: "缺口核验智能体", finding: "5 条要求中 1 条证实、2 条弱、2 条缺证据", confidence: 70, status: "success" },
-      { key: "recruiter", name: "招聘官视角智能体", finding: "信息不足以判断，需补研究方法与样本", confidence: 66, status: "success" },
-      { key: "action", name: "行动建议智能体", finding: "锁定动作：补一份完整用户研究报告（方法+样本+结论）", confidence: 84, status: "success" }
+      { key: "jd", name: "岗位要求解析", finding: "拆出 5 条要求，高重要性：研究方法、样本设计", confidence: 89, status: "success" },
+      { key: "claim", name: "简历经历提取", finding: "提取 5 条经历，仅 2 条对齐到岗位要求", confidence: 75, status: "success" },
+      { key: "bind", name: "证据匹配", finding: "0 条直接支撑，材料多为课堂作业", confidence: 60, status: "fallback" },
+      { key: "gap", name: "证据缺口核验", finding: "5 条要求中 1 条证实、2 条弱、2 条缺证据", confidence: 70, status: "success" },
+      { key: "recruiter", name: "面试关注点生成", finding: "信息不足以判断，需补研究方法与样本", confidence: 66, status: "success" },
+      { key: "action", name: "补证建议生成", finding: "锁定动作：补一份完整用户研究报告（方法+样本+结论）", confidence: 84, status: "success" }
     ],
     matrix: [
       { requirement: "研究方法掌握", weight: "high", claim: "学过用户研究方法", evidence: "课程作业", status: "weak", detail: "仍需：在真实项目中应用方法的证据。" },
@@ -332,7 +332,7 @@ export const candidatePackages: Record<string, CandidateEvidencePackage> = {
       { title: "研究结论落地", impact: "中影响", missing: "结论被采纳或落地的记录", status: "missing" }
     ],
     reviewLog: [
-      { at: "10:39", actor: "系统", action: "生成岗位证据就绪度 48" },
+      { at: "10:39", actor: "系统", action: "生成岗位匹配证据完成度 48" },
       { at: "10:41", actor: "周晨", action: "标记为无法判断，等待候选人补研究报告" }
     ]
   }

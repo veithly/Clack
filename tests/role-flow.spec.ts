@@ -15,7 +15,7 @@ test("登录页用演示账号快捷填入并进入对应工作台", async ({ pa
   await page.getByTestId("login-submit").click();
   await expect(page).toHaveURL(/\/enterprise$/);
   await expect(page.getByTestId("screen-enterprise")).toBeVisible();
-  await expect(page.getByText("候选人证据队列")).toBeVisible();
+  await expect(page.getByTestId("queue-C-2048")).toBeVisible();
 
   await page.goto("/login");
   await page.getByTestId("demo-account-school").click();
@@ -53,7 +53,7 @@ test("企业复核：选中候选人展开证据包与 6 智能体分析", async
 
   // 人工三档结论可选，且只在企业端人工下结论
   await page.getByTestId("conclusion-需补充").click();
-  await expect(page.getByTestId("review-control")).toContainText("已选：需补充");
+  await expect(page.getByTestId("review-control")).toContainText("已选：需要补证");
   await page.getByTestId("send-request").click();
   await expect(page.getByText("已发送，等待候选人在只读证据卡内补充材料。")).toBeVisible();
 });
