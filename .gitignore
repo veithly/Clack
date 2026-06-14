@@ -1,4 +1,6 @@
 node_modules/
+.DS_Store
+**/.DS_Store
 .next/
 .open-next/
 .wrangler/
@@ -14,6 +16,8 @@ artifacts/
 pitch/
 docs/screenshots/
 docs/ui-mockups/
+docs/*work-description*.md
+docs/*.pdf
 design-previews/
 scripts/
 
