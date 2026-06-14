@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getDefaultAiModel, getOpenAIClient } from "./ai-provider";
+import { getDefaultAiModel, getOpenAIClient, readModelJson, resolveMaxTokens, wantsJsonObjectMode } from "./ai-provider";
 import { PIPELINE_AGENTS, type AgentMeta } from "./pipeline-meta";
 import type {
   AgentStatus,
@@ -76,24 +76,6 @@ function firstMeaningfulLine(text: string) {
   return cleanText(line, 24);
 }
 
-function stripFence(text: string) {
-  return text.replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
-}
-
-function parseJson<T>(text: string): T | null {
-  try {
-    return JSON.parse(stripFence(text)) as T;
-  } catch {
-    const match = text.match(/\{[\s\S]*\}/);
-    if (!match) return null;
-    try {
-      return JSON.parse(match[0]) as T;
-    } catch {
-      return null;
-    }
-  }
-}
-
 function normalizeWeight(value: unknown): JobRequirement["weight"] {
   return value === "high" || value === "low" ? value : "medium";
 }
@@ -122,36 +104,36 @@ function average(values: number[]) {
 // ---------------------------------------------------------------------------
 
 // 单步上限：一步卡住就快速降级到规则，避免整条流水线被一个慢调用拖垮。
-// step-3.7-flash 是推理型模型，单步通常 8-18s，给到 30s 留足余量。
-const AGENT_TIMEOUT_MS = 30000;
+// step-3.7-flash 是推理型模型，要边想边答，单步通常 8-20s，给到 42s 留足余量。
+const AGENT_TIMEOUT_MS = 42000;
 
 async function callAgent<T>(systemPrompt: string, userPrompt: string, offline = false): Promise<{ data: T; engine: string } | null> {
   if (offline) return null;
   const client = getOpenAIClient();
   if (!client) return null;
   const model = getDefaultAiModel();
-  // 推理型模型（step-3.7-flash）偶发：把 token 预算耗在思考上、content 截断为空。
-  // 给足预算 + 失败重试一次，能把绝大多数空响应救回来。
+  // 推理型模型（step-3.7-flash）在 json_object 强制模式下会把答案写进 reasoning、
+  // content 退化成碎片；这里对推理模型关掉 json_object、给足 token，并在 content
+  // 解析失败时回落到 reasoning_content。失败再重试一次，仍失败才交给规则兜底。
+  const useJsonMode = wantsJsonObjectMode(model);
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const response = await client.chat.completions.create(
-        {
-          model,
-          temperature: 0.4,
-          max_tokens: 2800,
-          response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-          ]
-        },
-        { timeout: AGENT_TIMEOUT_MS, maxRetries: 1 }
-      );
-      const content = response.choices[0]?.message?.content;
-      if (content) {
-        const data = parseJson<T>(content);
-        if (data) return { data, engine: model };
-      }
+      const request: Record<string, unknown> = {
+        model,
+        temperature: 0.4,
+        max_tokens: resolveMaxTokens(model, 3000),
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ]
+      };
+      if (useJsonMode) request.response_format = { type: "json_object" };
+      const response = await client.chat.completions.create(request as never, {
+        timeout: AGENT_TIMEOUT_MS,
+        maxRetries: 1
+      });
+      const data = readModelJson<T>(response.choices[0]?.message as never);
+      if (data) return { data, engine: model };
     } catch {
       // 网络/超时/空响应 → 进入下一次尝试，仍失败则交给规则兜底。
     }
