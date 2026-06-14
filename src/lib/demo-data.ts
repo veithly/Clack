@@ -359,19 +359,19 @@ export type StudentDetail = {
 
 export const studentDetails: Record<string, StudentDetail> = {
   "S-1021": {
-    summary: "产品运营方向，材料齐全度中等，主要缺『项目结果指标』。",
+    summary: "产品运营方向，材料覆盖度中等，主要缺少『项目结果指标』。",
     readinessTrend: "近两周 58% → 72%",
-    agentInsight: "缺口核验智能体：活动经历有，但缺少可量化的结果指标。",
+    agentInsight: "缺口提示：活动经历已有，但缺少可量化的结果指标。",
     recommendedPack: "项目作品页训练包",
     gaps: [
-      { title: "项目结果指标", status: "weak", flaggedBy: "缺口核验智能体", suggestion: "补充活动前后的转化/留存数据。" },
-      { title: "个人动作说明", status: "weak", flaggedBy: "证据绑定智能体", suggestion: "区分团队成果与你的具体动作。" }
+      { title: "项目结果指标", status: "weak", flaggedBy: "缺口核验智能体", suggestion: "补充活动前后转化率、留存率或报名完成率数据。" },
+      { title: "个人动作说明", status: "weak", flaggedBy: "证据绑定智能体", suggestion: "说明本人负责的环节、具体动作和产出。" }
     ]
   },
   "S-1022": {
     summary: "数据分析方向，理论够但缺可访问的数据作品。",
     readinessTrend: "近两周 49% → 58%",
-    agentInsight: "证据绑定智能体：声明可视化能力，但找不到可引用的作品链接。",
+    agentInsight: "缺口提示：学生提到可视化能力，但缺少可打开的作品链接。",
     recommendedPack: "项目作品页训练包",
     gaps: [
       { title: "数据作品链接", status: "missing", flaggedBy: "证据绑定智能体", suggestion: "做一个可公开访问的看板或报告。" },
@@ -381,7 +381,7 @@ export const studentDetails: Record<string, StudentDetail> = {
   "S-1023": {
     summary: "前端开发方向，准备度较高，仅缺线上项目说明。",
     readinessTrend: "近两周 74% → 81%",
-    agentInsight: "缺口核验智能体：作品有，但缺少线上可访问的项目说明页。",
+    agentInsight: "缺口提示：已有作品材料，但缺少线上可访问的项目说明页。",
     recommendedPack: "实习经历证据整理包",
     gaps: [
       { title: "线上项目说明", status: "weak", flaggedBy: "缺口核验智能体", suggestion: "补一个可访问的部署链接与说明。" }
@@ -390,7 +390,7 @@ export const studentDetails: Record<string, StudentDetail> = {
   "S-1024": {
     summary: "用户研究方向，缺真实研究材料，准备度偏低。",
     readinessTrend: "近两周 41% → 46%",
-    agentInsight: "缺口核验智能体：材料多为课堂作业，缺真实研究的方法与样本。",
+    agentInsight: "缺口提示：材料多为课堂作业，缺少真实研究的方法与样本。",
     recommendedPack: "面试追问准备包",
     gaps: [
       { title: "调研样本与方法", status: "missing", flaggedBy: "缺口核验智能体", suggestion: "完成一次有样本量的真实调研。" },
@@ -404,7 +404,7 @@ export const schoolAgentInsight = {
   scanned: 24,
   topGap: "项目结果指标",
   topGapShare: 62,
-  note: "缺口核验智能体在 24 份体检中标出：『项目结果指标』是最高频缺口。"
+  note: "24 份材料检查中，『项目结果指标』是最高频缺口。"
 };
 
 export function statusText(status: EvidenceStatus) {

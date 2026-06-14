@@ -56,7 +56,7 @@ export function ProductHeader({ title, subtitle }: { title: string; subtitle: st
         <Link href="/school">高校</Link>
         <Link href="/admin">管理员</Link>
       </nav>
-      <div className="boundary-note"><LockKeyhole size={16} />仅整理可证明性，不替企业做录用决定</div>
+      <div className="boundary-note"><LockKeyhole size={16} />只整理材料支撑关系，不做录用判断</div>
     </header>
   );
 }
@@ -64,27 +64,27 @@ export function ProductHeader({ title, subtitle }: { title: string; subtitle: st
 export function PassportWorkspace() {
   return (
     <main className="app-shell commercial-shell">
-      <ProductHeader title="证据护照" subtitle="把项目、声明和证据变成可复用资产" />
+      <ProductHeader title="证据护照" subtitle="把经历和证明材料整理成可复用资产" />
       <section className="workspace-hero passport-hero">
         <div className="hero-copy">
           <span className="hero-label">候选人资产</span>
-          <h2>一份材料，可以支撑多个岗位声明</h2>
-          <p>默认私密。分享前确认可见范围，企业只能看到对应岗位的只读证据卡。</p>
+          <h2>一份材料，可以复用到多个岗位</h2>
+          <p>默认私密。分享前先确认可见范围，企业只能查看你授权的只读证据卡。</p>
         </div>
         <div className="passport-graph panel">
-          <div className="passport-node primary">声明：负责报名页优化</div>
+          <div className="passport-node primary">经历：负责报名页优化</div>
           <div className="passport-link-line" />
-          <div className="passport-node">证据：问卷样本 86 人</div>
-          <div className="passport-node">证据：转化率 21% 到 39%</div>
-          <div className="passport-node">证据：项目复盘截图</div>
+          <div className="passport-node">材料：问卷样本 86 人</div>
+          <div className="passport-node">材料：转化率 21% 到 39%</div>
+          <div className="passport-node">材料：项目复盘截图</div>
         </div>
       </section>
       <section className="workspace-two-col">
         <section className="panel">
           <div className="panel-head clean">
             <div>
-              <div className="panel-title"><ClipboardList size={20} />证据对象</div>
-              <p>独立对象，可复用、隐藏、撤回、绑定多条声明。</p>
+              <div className="panel-title"><ClipboardList size={20} />证明材料</div>
+              <p>每份材料都可以复用、隐藏、撤回，并关联多段经历。</p>
             </div>
           </div>
           <div className="material-list roomy">
@@ -103,8 +103,8 @@ export function PassportWorkspace() {
         <section className="panel claims-panel">
           <div className="panel-head clean">
             <div>
-              <div className="panel-title"><ShieldCheck size={20} />声明引用关系</div>
-              <p>一份证据可支撑多个声明，一个声明可绑定多份证据。</p>
+              <div className="panel-title"><ShieldCheck size={20} />经历与材料关系</div>
+              <p>一份材料可支撑多段经历，一段经历也可以关联多份材料。</p>
             </div>
           </div>
           {[
@@ -471,9 +471,9 @@ function GapRow({ gap }: { gap: PackageGap }) {
 }
 
 const TRAINING_PACKS = [
-  { title: "项目作品页训练包", meta: "适用产品、运营、设计岗位", body: "提交项目背景、动作、结果和截图。" },
-  { title: "实习经历证据整理包", meta: "适用初级岗位", body: "整理导师确认、工作样本和复盘材料。" },
-  { title: "面试追问准备包", meta: "适用专场招聘前", body: "把证据卡转成面试追问清单。" }
+  { title: "项目作品页训练包", meta: "适合产品、运营、设计方向", body: "帮学生补齐项目背景、个人动作、结果指标和截图。" },
+  { title: "实习经历证据整理包", meta: "适合初级岗位", body: "帮学生整理导师确认、工作样本和复盘材料。" },
+  { title: "面试追问准备包", meta: "适合专场招聘前", body: "帮学生把证据卡转成面试追问清单。" }
 ];
 
 export function SchoolWorkspace() {
@@ -491,12 +491,12 @@ export function SchoolWorkspace() {
 
   return (
     <main className="app-shell commercial-shell" data-testid="screen-school">
-      <ProductHeader title="高校就业证据看板" subtitle="只看缺口与训练，不看企业备注" />
+      <ProductHeader title="高校就业证据看板" subtitle="只看学生材料缺口与训练建议，不展示企业评价" />
 
       <section className="panel agent-insight-band" data-testid="school-insight">
         <Cpu size={20} />
         <p>{schoolAgentInsight.note}</p>
-        <span className="status-pill neutral">{schoolAgentInsight.scanned} 份体检 · {schoolAgentInsight.topGapShare}% 命中</span>
+        <span className="status-pill neutral">{schoolAgentInsight.scanned} 份材料 · {schoolAgentInsight.topGapShare}% 出现该缺口</span>
       </section>
 
       <section className="school-grid">
@@ -504,7 +504,7 @@ export function SchoolWorkspace() {
           <div className="panel-head clean">
             <div>
               <div className="panel-title"><GraduationCap size={20} />学生准备度</div>
-              <p>准备度表示材料证据覆盖，不表示学生能力。</p>
+              <p>准备度只表示材料证据覆盖，不代表学生能力。</p>
             </div>
           </div>
           <div className="student-list">
@@ -512,7 +512,7 @@ export function SchoolWorkspace() {
               <button className={`student-row student-row-button ${item.id === selectedStudent ? "selected" : ""}`} key={item.id} onClick={() => pickStudent(item.id)} type="button" data-testid={`student-${item.id}`}>
                 <div>
                   <b>{item.id}</b>
-                  <span>{item.target} · 主要缺口：{item.gap}</span>
+                  <span>{item.target}方向 · 主要缺口：{item.gap}</span>
                 </div>
                 <strong>{item.readiness}%</strong>
                 <small>{item.mentorState}</small>
@@ -528,7 +528,7 @@ export function SchoolWorkspace() {
             <p>{detail.summary}</p>
             <div className="student-trend">
               <strong>{readiness}%</strong>
-              <span>准备度 · {detail.readinessTrend}</span>
+              <span>材料覆盖度 · {detail.readinessTrend}</span>
             </div>
             <div className="agent-insight-inline"><Cpu size={15} />{detail.agentInsight}</div>
             <div className="student-gaps">
@@ -543,7 +543,7 @@ export function SchoolWorkspace() {
                 </article>
               ))}
             </div>
-            <div className="recommended-pack"><BookOpenCheck size={15} />建议训练包：{detail.recommendedPack}</div>
+            <div className="recommended-pack"><BookOpenCheck size={15} />推荐训练包：{detail.recommendedPack}</div>
           </aside>
         ) : null}
       </section>
@@ -551,12 +551,12 @@ export function SchoolWorkspace() {
       <section className="panel heat-panel">
         <div className="panel-head clean">
           <div>
-            <div className="panel-title"><BookOpenCheck size={20} />缺口热力</div>
-            <p>颜色表示缺口密度，不用于学生评分。</p>
+            <div className="panel-title"><BookOpenCheck size={20} />缺口分布</div>
+            <p>颜色表示该类材料缺口出现频率，不用于学生评分。</p>
           </div>
         </div>
         <div className="heat-table">
-          <div className="heat-row head"><span>岗位族</span><span>项目</span><span>实习</span><span>作品</span><span>证书</span><span>成果</span></div>
+          <div className="heat-row head"><span>方向</span><span>项目</span><span>实习</span><span>作品</span><span>证书</span><span>成果</span></div>
           {heatCells.map((row) => (
             <div className="heat-row" key={row.role}>
               <span>{row.role}</span>
@@ -584,7 +584,7 @@ export function SchoolWorkspace() {
         <UserRoundSearch size={22} />
         <div>
           <h2>导师待跟进：{selectedStudent}</h2>
-          <p>已选「{activeTraining}」。操作是发送补证据建议，不是给学生打分。</p>
+          <p>已选择「{activeTraining}」。发送的是补证据建议，不会形成学生评分。</p>
         </div>
         <button className="primary-button min-h-11 min-w-11" onClick={() => setMentorSent(true)} type="button" data-testid="mentor-send">
           {mentorSent ? "建议已生成" : "发送补证据建议"}
@@ -597,12 +597,12 @@ export function SchoolWorkspace() {
 const SENSITIVE_FIELDS = ["年龄", "照片", "性别", "婚育状况", "籍贯", "院校层级"];
 
 const AGENT_NODES = [
-  { name: "岗位解析智能体", state: "正常" },
-  { name: "简历声明智能体", state: "正常" },
-  { name: "证据绑定智能体", state: "正常" },
-  { name: "缺口核验智能体", state: "正常" },
-  { name: "招聘官视角智能体", state: "正常" },
-  { name: "行动建议智能体", state: "正常" }
+  { name: "岗位要求解析", state: "正常" },
+  { name: "简历经历提取", state: "正常" },
+  { name: "证据匹配", state: "正常" },
+  { name: "证据缺口核验", state: "正常" },
+  { name: "面试关注点生成", state: "正常" },
+  { name: "补证建议生成", state: "正常" }
 ];
 
 export function AdminWorkspace() {
@@ -614,27 +614,27 @@ export function AdminWorkspace() {
   const auditRows = [
     ["10:16", "林知然", "生成岗位证据报告", "候选人授权材料", "通过"],
     ["10:28", "周晨", "查看只读证据卡", "企业复核员权限", "通过"],
-    ["10:31", "缺口核验智能体", "标记证据缺口", "只读取授权材料", "通过"],
-    ["10:31", "系统", "忽略敏感字段", "年龄/照片不进入判断", "已拦截"],
+    ["10:31", "证据缺口核验", "标记证据缺口", "只读取授权材料", "通过"],
+    ["10:31", "系统", "忽略敏感字段", "年龄/照片不参与分析", "已拦截"],
     ["10:42", "许老师", "发送训练包建议", "高校导师权限", "通过"]
   ];
 
   return (
     <main className="app-shell commercial-shell" data-testid="screen-admin">
-      <ProductHeader title="平台管理员控制台" subtitle="权限、审计、模型与合规边界" />
+      <ProductHeader title="平台管理员控制台" subtitle="管理权限、审计记录与合规边界" />
       <section className="admin-grid">
         <section className="panel">
           <div className="panel-head clean">
             <div>
               <div className="panel-title"><KeyRound size={20} />角色权限模板</div>
-              <p>四类权限模板，可接入企业 SSO 与高校组织架构。</p>
+              <p>四类角色权限，可对接企业 SSO 与高校组织架构。</p>
             </div>
           </div>
           <div className="permission-template-list">
             {[
               ["候选人", "上传材料、生成报告、授权证据卡", "默认私密"],
-              ["企业复核员", "查看授权证据、复核、请求补证据", "禁止自动淘汰"],
-              ["高校导师", "查看准备度、训练包、跟进建议", "不可看企业备注"],
+              ["企业复核员", "查看授权证据、记录复核判断、请求补证据", "禁止自动淘汰"],
+              ["高校导师", "查看材料覆盖度、训练包与跟进建议", "不展示企业评价"],
               ["平台管理员", "审计、模型配置、成本监控", "不可编辑候选人材料"]
             ].map(([role, allow, deny]) => (
               <article className="permission-template" key={role}>
@@ -647,12 +647,12 @@ export function AdminWorkspace() {
         </section>
         <aside className="panel admin-status-panel">
           <span className="status-pill blue"><ServerCog size={14} />系统状态</span>
-          <h2>AI 模型、D1 已接入生产环境</h2>
-          <p>管理员看运行与合规，不接触候选人私密原文。</p>
+          <h2>模型服务与数据库已接入生产环境</h2>
+          <p>管理员只查看运行状态与合规记录，不接触候选人私密原文。</p>
           <div className="admin-metrics">
-            <div><strong>26ms</strong><span>Worker 启动</span></div>
-            <div><strong>6</strong><span>Agent 节点</span></div>
-            <div><strong>{enteredCount}</strong><span>敏感字段进入判断</span></div>
+            <div><strong>26ms</strong><span>服务启动</span></div>
+            <div><strong>6</strong><span>分析节点</span></div>
+            <div><strong>{enteredCount}</strong><span>敏感字段参与分析</span></div>
           </div>
         </aside>
       </section>
@@ -662,10 +662,10 @@ export function AdminWorkspace() {
           <div className="panel-head clean">
             <div>
               <div className="panel-title"><EyeOff size={20} />敏感字段过滤</div>
-              <p>被忽略的字段永远不进入 AI 判断。点选可演示开关效果。</p>
+              <p>被忽略的字段不会进入证据分析。点选可演示开关效果。</p>
             </div>
             <span className={enteredCount === 0 ? "status-pill green" : "status-pill red"}>
-              {enteredCount === 0 ? "0 字段进入判断" : `${enteredCount} 字段进入判断`}
+              {enteredCount === 0 ? "0 字段参与分析" : `${enteredCount} 字段参与分析`}
             </span>
           </div>
           <div className="sensitive-list">
@@ -677,18 +677,18 @@ export function AdminWorkspace() {
                 onClick={() => setBlocked((prev) => ({ ...prev, [field]: !prev[field] }))}
               >
                 <span>{field}</span>
-                <b>{blocked[field] ? "已忽略" : "参与判断"}</b>
+                <b>{blocked[field] ? "已忽略" : "参与分析"}</b>
               </button>
             ))}
           </div>
-          <p className="sensitive-note"><ShieldCheck size={14} />默认全部忽略，符合「敏感身份字段不进入判断」的合规边界。</p>
+          <p className="sensitive-note"><ShieldCheck size={14} />默认全部忽略，符合「敏感身份字段不参与证据分析」的合规边界。</p>
         </section>
 
         <section className="panel" data-testid="agent-nodes">
           <div className="panel-head clean">
             <div>
-              <div className="panel-title"><Cpu size={20} />AI 判断节点</div>
-              <p>平台统一编排的 6 个智能体，每步都写入审计。</p>
+              <div className="panel-title"><Cpu size={20} />证据分析节点</div>
+              <p>平台统一编排 6 个分析节点，每一步都写入审计。</p>
             </div>
           </div>
           <div className="agent-node-list">
@@ -707,7 +707,7 @@ export function AdminWorkspace() {
         <div className="panel-head clean">
           <div>
             <div className="panel-title"><ShieldCheck size={20} />审计日志</div>
-            <p>每次证据查看、AI 判断和权限切换都能追踪。</p>
+            <p>每次证据查看、分析处理和权限切换都可追踪。</p>
           </div>
         </div>
         <div className="audit-table">
