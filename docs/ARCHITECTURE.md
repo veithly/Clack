@@ -87,8 +87,17 @@ P0 使用 6 智能体流水线 + 稳定规则层：
 - `/api/import/jd` 在 Worker 端抓取公开岗位链接，去除脚本和样式后提取正文；需要登录或反爬页面会明确提示手动粘贴。
 - `/api/report/stream` 让前端扫描台逐个点亮智能体；没有模型密钥或单步失败时，系统自动降级到规则兜底。
 - 结果页提供 STAR 改写、面试追问预演和多岗位对比三个 AI 动作。
-- 多角色 Demo 使用同一份证据依次展示候选人、企业、高校和管理员视角；视频路径为 `pitch/recording/multi-role-demo.mp4`。
-- 多角色 Pitch Deck 路径为 `pitch/deck/咔哒-多用户权限版路演.pptx`，预览 contact sheet 在 `outputs/manual-20260608/presentations/clack-multi-role/preview/contact-sheet.png`。
+- 多角色工作台使用同一份证据依次展示候选人、企业、高校和管理员视角。
+
+## 模型响应兼容
+
+`src/lib/ai-provider.ts` 统一处理模型调用和 JSON 解析：
+
+- 普通对话模型使用 `response_format: { type: "json_object" }`。
+- `step-2`、`step-3`、`thinking`、`reasoner` 类推理模型关闭强制 JSON 模式，避免模型把有效 JSON 写进 reasoning 字段后让 `content` 变成碎片。
+- 推理模型的 token 预算至少提升到 5000，6 智能体流水线的单步超时为 42 秒。
+- 解析顺序为 `content`、`reasoning_content`、`reasoning`，每段文本取最后一个可解析 JSON 对象。
+- 两次模型调用都失败时，流水线回到规则层，保证评审样例能生成完整报告。
 
 ## 安全边界
 
