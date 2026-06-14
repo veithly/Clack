@@ -12,6 +12,7 @@ artifacts/
 pitch/
 docs/screenshots/
 docs/ui-mockups/
+design-previews/
 scripts/
 
 *.tsbuildinfo

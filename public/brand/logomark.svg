@@ -1,7 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="咔哒标志">
-  <rect x="10" y="10" width="76" height="76" rx="14" fill="#ffffff" stroke="#18223a" stroke-width="5"/>
-  <path d="M26 29h28M26 43h36M26 57h24" stroke="#3156d4" stroke-width="5" stroke-linecap="round"/>
-  <path d="M64 56l7 7 14-18" fill="none" stroke="#14a866" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="73" cy="51" r="18" fill="none" stroke="#14a866" stroke-width="4" opacity=".24"/>
-  <path d="M18 18h15M18 18v15M78 18H63M78 18v15M18 78V63M18 78h15M78 78H63M78 78V63" stroke="#18223a" stroke-width="4" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="咔哒 Clack 标志">
+  <defs>
+    <linearGradient id="keyBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2e4e"/>
+      <stop offset=".52" stop-color="#111827"/>
+      <stop offset="1" stop-color="#070a12"/>
+    </linearGradient>
+    <linearGradient id="keyEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6fe3f4"/>
+      <stop offset=".5" stop-color="#3fd8f0"/>
+      <stop offset="1" stop-color="#2f7bff"/>
+    </linearGradient>
+    <linearGradient id="checkInk" x1="29" y1="60" x2="69" y2="33" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset=".45" stop-color="#6fe3f4"/>
+      <stop offset="1" stop-color="#3fd8f0"/>
+    </linearGradient>
+    <filter id="checkGlow" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="1.9" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="11" y="17" width="74" height="70" rx="22" fill="#000000" opacity=".52"/>
+  <rect x="8" y="7" width="80" height="73" rx="22" fill="url(#keyBody)" stroke="#6fe3f4" stroke-opacity=".42" stroke-width="1.8"/>
+  <path d="M16 14h64" stroke="url(#keyEdge)" stroke-width="5" stroke-linecap="round"/>
+  <rect x="17" y="21" width="62" height="51" rx="16" fill="#070b14" stroke="#3fd8f0" stroke-opacity=".34" stroke-width="1.4"/>
+  <path d="M31 49.5l10.5 10.5 24-26.5" fill="none" stroke="url(#checkInk)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#checkGlow)"/>
+  <path d="M20 68h56" stroke="#000000" stroke-width="3.5" stroke-linecap="round" opacity=".36"/>
 </svg>

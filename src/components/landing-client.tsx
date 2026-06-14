@@ -18,10 +18,10 @@ import {
 import { BrandMark } from "@/components/brand";
 
 const ROLES = [
-  { step: 1, key: "candidate", icon: UserRound, title: "候选人", action: "上传一次 · 补证据 · 授权可见范围", meta: "约 3 分钟", href: "/login?role=candidate" },
-  { step: 2, key: "enterprise", icon: Building2, title: "企业复核员", action: "看授权证据 · 人工复核 · 申请补材料", meta: "约 2 分钟", href: "/login?role=enterprise" },
-  { step: 3, key: "school", icon: GraduationCap, title: "高校导师", action: "就业看板 · 缺口热力 · 训练包", meta: "约 2 分钟", href: "/login?role=school" },
-  { step: 4, key: "admin", icon: SlidersHorizontal, title: "平台管理员", action: "权限模板 · 敏感字段 · 审计日志", meta: "约 1 分钟", href: "/login?role=admin" }
+  { step: 1, key: "candidate", icon: UserRound, title: "候选人", action: "上传材料，补齐证据，设置可见范围", meta: "约 3 分钟", href: "/login?role=candidate" },
+  { step: 2, key: "enterprise", icon: Building2, title: "企业复核员", action: "查看授权证据，人工复核，申请补材料", meta: "约 2 分钟", href: "/login?role=enterprise" },
+  { step: 3, key: "school", icon: GraduationCap, title: "高校导师", action: "查看就业看板，发现共性缺口，安排训练", meta: "约 2 分钟", href: "/login?role=school" },
+  { step: 4, key: "admin", icon: SlidersHorizontal, title: "平台管理员", action: "管理权限模板，屏蔽敏感字段，查看审计日志", meta: "约 1 分钟", href: "/login?role=admin" }
 ] as const;
 
 const PIPELINE = [
@@ -29,7 +29,7 @@ const PIPELINE = [
   { icon: ScanSearch, name: "简历声明", desc: "抽取可核验的能力声明" },
   { icon: Link2, name: "证据绑定", desc: "把材料片段绑定到声明" },
   { icon: ShieldCheck, name: "缺口核验", desc: "标出缺证据、弱证据" },
-  { icon: UserSearch, name: "招聘官分身", desc: "模拟第一眼判断与追问" },
+  { icon: UserSearch, name: "招聘官视角", desc: "模拟第一眼判断与追问" },
   { icon: GanttChartSquare, name: "行动建议", desc: "先补哪条最值，再决定投不投" }
 ] as const;
 
@@ -83,7 +83,7 @@ export function LandingClient() {
             投之前，<span className="kada-key">咔哒</span>一下
           </h1>
           <p className="cine-lede">
-            把岗位要求和你的简历贴在一起，6 个智能体逐条核对证据，30 秒给出能不能投的判断，每一步都能追溯。不替你润色，帮你证明。
+            不美化简历，只核对证据。粘贴岗位和简历，30 秒判断这份工作值不值得投。
           </p>
           <div className="cine-cta">
             <Link className="cine-btn primary" href="/candidate?autostart=1" data-testid="run-story-button" data-cta-primary="一键跑完整故事">
@@ -98,15 +98,15 @@ export function LandingClient() {
           <dl className="cine-trust">
             <div>
               <dt>6</dt>
-              <dd>串行智能体</dd>
+              <dd>6 步证据核对</dd>
             </div>
             <div>
               <dt>4</dt>
-              <dd>角色共用证据链</dd>
+              <dd>4 类角色同看一份证据</dd>
             </div>
             <div>
               <dt>0</dt>
-              <dd>自动淘汰</dd>
+              <dd>0 次自动淘汰</dd>
             </div>
           </dl>
         </div>
@@ -121,9 +121,9 @@ export function LandingClient() {
         <div className="cine-band-art pipeline" aria-hidden="true" />
         <div className="cine-band-inner">
           <span className="cine-eyebrow">PIPELINE</span>
-          <h2>6 步真实推理，不是 1 次黑箱打分</h2>
+          <h2>6 步核对，不靠一次打分</h2>
           <p className="cine-band-lede">
-            每一步都有输入、输出和置信度，可在轨迹页一条条追溯；没有模型密钥时自动降级为规则兜底，演示永远跑得通。
+            每一步都能看到依据：岗位要求、简历声明、证据来源和判断结果。
           </p>
           <ol className="cine-steps">
             {PIPELINE.map((node, index) => (
@@ -142,9 +142,9 @@ export function LandingClient() {
         <div className="cine-band-inner cine-proof-inner">
           <div className="cine-proof-copy">
             <span className="cine-eyebrow">EVIDENCE READOUT</span>
-            <h2>声明逐条照出证据强弱</h2>
+            <h2>逐条看清证据强弱</h2>
             <p className="cine-band-lede">
-              绿灯=已证实，黄灯=证据弱，红灯=缺证据。咔哒不替你润色，只把"可证明性"摊开给你看。
+              绿灯是已证实，黄灯是证据弱，红灯是缺证据。咔哒不美化简历，只告诉你哪些能证明、哪些还缺证据。
             </p>
           </div>
           <div className="cine-readout">
@@ -172,7 +172,7 @@ export function LandingClient() {
         <div className="cine-roles-head">
           <div>
             <span className="cine-eyebrow">ROLES</span>
-            <h2>一份证据，四个角色各取所需</h2>
+            <h2>一份证据，四类角色看见不同重点</h2>
           </div>
           <Link className="cine-textlink" href="/candidate">
             按导览顺序开始
@@ -200,7 +200,7 @@ export function LandingClient() {
       <section className="cine-boundary-band">
         <ShieldCheck size={20} />
         <p>
-          边界常驻：咔哒只整理“可证明性”，不验证经历真假，不承诺录用概率，不自动排名或淘汰，敏感身份字段不进入判断。
+          咔哒只判断“能不能证明”，不验证经历真假，不预测录用概率，不自动排名或淘汰，也不使用敏感身份字段。
         </p>
       </section>
 
